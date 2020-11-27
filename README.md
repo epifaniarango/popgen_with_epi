@@ -6,10 +6,11 @@ For local ancestry analysis, we need first to do the haplotyple estimation or ph
 - BCFTOOLS
 - BEAGLE
 - RFMIX
+- VCFTOOLS
 
 The scripts are not all mine. I picked some codes from https://github.com/chiarabarbieri/SNPs_HumanOrigins_Recipes and did a few changes.
 
-In my case, I am studing South American populations, sometimes it is not so easy to select a reference panel. If you are in a similar situation I have this short R script based on ADMIXTURE to select the reference panel in these kind of situations.
+
 
 ## 1. Phasing with BEAGLE
 ```
@@ -71,12 +72,30 @@ done
 ```
 
 ## 2. Local ancestry inference with RFMIX
-
-The order of the individuals is important when we use RFMIX. I put the admixed individuals first and then the reference panel, this file I called it (samples_order.txt). This file is just a plain text with one column, the name of the individuals on each row on the desired order. We also need to put all the chromose back together.
+First we need to put all the chromose back together and prepared 2 vcf files: one with the target individuals and one with the reference panel. For that you will need a plain text file with one column, each row with the name of an individual, one for the target and one for the reference individuals (ref_filter.txt and admix_ind_america.txt). I selected the reference panel based on a previous run of admixture with a simple Rscript. 
 
 ```
-for chr in {1..22}; do bcftools view -S samples_order.txt BeaglePhased$chr.vcf.gz > BeaglePhased$chr.vcf ; done 
-
-for chr in {2..22}; do tabix -p vcf BeaglePhased$chr.vcf.gz ; done
 bcftools concat BeaglePhased{1..22}.vcf.gz -Oz -o dataset_phased.vcf.gz
+bgzip dataset_phased.vcf
+tabix -p vcf dataset_phased.vcf.gz
+
+vcftools --vcf dataset_phased.vcf --keep ref_filter.txt --recode --out dataset_reference
+vcftools --vcf dataset_phased.vcf --keep admix_ind_america.txt --recode --out dataset_admix
+
 ```
+The reference VCF file needs to be sorted. In my case I have individuals from Spain, Yoruba and America in the reference. I put first the American, then the Spanish and then the Yoruba individuals on a plain text file in the order that I wanted (
+
+The map file that we created before is not valid for RFMIX, we just need a very simple R code:
+```
+#Prepare the map file
+map<-read.table("dataset.map", sep="")
+map=subset(map, map$V1 <23) #only autosomes
+map=map[,c(1,4,3)]
+map[,3]=map[,3]*100
+write.table(map, "ref_map_rfmix_cM.map")
+```
+
+
+
+
+

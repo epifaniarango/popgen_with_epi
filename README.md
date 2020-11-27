@@ -190,3 +190,127 @@ for (y in 1:22){
 
 ### 2.4 Plotting individuals
 It is not really necessary, but... it looks nice xD
+
+
+
+## 3. Masking
+In this case, I will select only the ditypes (same ancestry in both alleles). This script is quite unefficient, I just put on the server with 10 cores. It actually didn't take that much. In this case, I only keep the American ancestry
+
+```
+#!/usr/bin/env Rscript
+
+
+
+install.packages("whatever", lib="path/to/folder")
+.libPaths(c(.libPaths(), "path/to/folder"))
+
+setwd("")
+#install.packages("vroom")
+
+library(vroom)
+ditypes_america=vroom("fragment_call_ditypes_america.txt", col_names = F)
+
+
+ditypes_america=subset(ditypes_america, ditypes_america$X6 !=0)
+
+cat("normal for loop\n")
+
+library("foreach")
+library("doParallel")
+
+# normal for loop
+cat("normal for loop\n")
+
+for (i in 1:10) {
+  cat(i, '\n')
+}
+
+# make a cluster of 10 threads, outfile="" makes it so output from each thread is visible in the command line
+cl <- makeCluster(10, outfile="")
+registerDoParallel(cl)
+
+
+cat("multithreaded for loop\n")
+foreach (i=1:22) %dopar% {
+  # any packages used inside the for loop must be loaded here:
+  library("vroom")
+  cat(i, '\n')
+  
+  ditypes_chr=subset(ditypes_america, ditypes_america$X1 ==i)
+  
+  x=as.data.frame(t(ditypes_chr[,-c(1:5)]))
+  x=as.data.frame(x)
+  
+  
+  y=as.numeric(x[1,])
+  y=cumsum(y)
+  y=append(0,y)
+  
+  x=x[-1,]
+  x <- unique(x)
+  
+  ped=vroom(paste("/srv/kenlab/epifania/Chile/8_RFMIX/dataset1/combination1/admix_combination1_chr",i,".ped", sep = ""), col_names = F, col_types = c(.default = "c"))
+  
+  z=seq(8, ncol(ped),2)
+
+  for (rowId in 1:nrow(x)) {
+    for (colId in 1:ncol(x)) {
+      if(x[rowId, colId]==0){
+        ped[rowId,z[c((y[colId]+1):y[colId+1])]-1]="0"
+        ped[rowId,z[c((y[colId]+1):y[colId+1])]]="0"
+      }
+    }
+  }
+  
+  write.table(ped,file=paste("/srv/kenlab/epifania/Chile/8_RFMIX/dataset1/combination1/admix_combination1_chr",i,"_masked.ped", sep = ""), col.names=FALSE ,row.names=FALSE, quote=F)
+  
+  }
+
+
+
+
+
+
+
+
+
+#I also realised that i only took the cases were the ditypes are identical so I only need one 
+#assigment per individual
+x=x[-1,]
+x <- unique(x)
+
+
+ped=vroom("admix_combination1.ped", col_names = F, col_types = c(.default = "c"))
+
+
+#R interpreat some of the "T"as "'TRUE"
+#solved 
+
+z=seq(8, ncol(ped2),2)
+
+ped2=ped
+
+
+library("foreach")
+library("doParallel")
+
+# normal for loop
+
+cl <- makeCluster(3, outfile="")
+registerDoParallel(cl)
+
+cat("normal for loop\n")
+
+z=seq(8, ncol(ped2),2)
+for (rowId in 1:nrow(x)) {
+  for (colId in 1:ncol(x)) {
+    if(x[rowId, colId]==0){
+      ped2[rowId,z[c((y[colId]+1):y[colId+1])]-1]="0"
+      ped2[rowId,z[c((y[colId]+1):y[colId+1])]]="0"
+    }
+  }
+}
+
+
+write.table(ped2,"admix_combination1_masked.ped", row.names = F, col.names = F, quote = F)
+```

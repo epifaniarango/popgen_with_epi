@@ -127,7 +127,7 @@ for chr in {1..22}; do rfmix -f dataset_admix.recode.vcf.gz -r dataset_reference
 ```
 
 ### 2.3 Processing the output
-Sometimes there are 2 or more assignation for a fragment the probability that appears it is from a SNP that is in the middle of the fragment. I don't really know why but I need to get rid of those fragments. Also I only took ancestry assignation with a posterior probability higher than 90%.
+Sometimes there are 2 or more assignation for a fragment the probability that appears it is from a SNP that is in the middle of the fragment. I don't really know why but I need to get rid of those fragments. Also I only took ancestry assignation with a posterior probability higher than 90%. I am not a bioinformatician, sorry for the unefficient scripts!
 
 
 ```

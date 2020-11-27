@@ -120,14 +120,14 @@ write.table(map, "ref_map_rfmix_cM.map")
 ```
 
 ### 2.2 Running the program
-I run it on our server, it took around 24h using 8 cores with more or less 400 individuals. 
+I run it on our server, it took around 24h using 8 cores with more or less 400 individuals. You should read the manual to select the parameters that work for your data. 
 
 ```
 for chr in {1..22}; do rfmix -f dataset_admix.recode.vcf.gz -r dataset_reference.recode.vcf.gz -m sample_ref_file.txt -g ref_map_rfmix_cM.map -o rfmix_chr$chr -c 0.2 -r 0.2 -w 0.2 -e 1 --reanalyze-reference  -n 5 -G 11 --chromosome=$chr -n 8 ; done
 ```
 
 ### 2.3 Processing the output
-Sometimes there are 2 or more assignation for a fragment the probability that appears it is from a SNP that is in the middle of the fragment. I don't really know why but I need to get rid of those fragments. Also I only took ancestry assignation with a posterior probability higher than 90%. I am not a bioinformatician, sorry for the unefficient scripts!
+Sometimes there are 2 or more assignation for a fragment the probability that appears it is from a SNP that is in the middle of the fragment. I don't really know why but I need to get rid of those fragments. Also I only took ancestry assignation with a posterior probability higher than 90%. I am not a bioinformatician, sorry for the unefficient scripts! I am no the best of keeping track of every step, feel free to ask!
 
 
 ```

@@ -188,4 +188,5 @@ for (y in 1:22){
 ```
 
 
-
+### 2.4 Plotting individuals
+It is not really necessary, but... it looks nice xD

@@ -9,6 +9,8 @@ For local ancestry analysis, we need first to do the haplotyple estimation or ph
 
 The scripts are not all mine. I picked some codes from https://github.com/chiarabarbieri/SNPs_HumanOrigins_Recipes and did a few changes.
 
+In my case, I am studing South American populations, sometimes it is not so easy to select a reference panel. If you are in a similar situation I have this short R script based on ADMIXTURE to select the reference panel in these kind of situations.
+
 ## 1. Phasing with BEAGLE
 ```
 plink --bfile  yourfile  --allow-no-sex --recode vcf-iid --alleleACGT --out  dataset

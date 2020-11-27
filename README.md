@@ -83,7 +83,30 @@ vcftools --vcf dataset_phased.vcf --keep ref_filter.txt --recode --out dataset_r
 vcftools --vcf dataset_phased.vcf --keep admix_ind_america.txt --recode --out dataset_admix
 
 ```
-The reference VCF file needs to be sorted. In my case I have individuals from Spain, Yoruba and America in the reference. I put first the American, then the Spanish and then the Yoruba individuals on a plain text file in the order that I wanted (
+A class file is also need. It is just basically a file where you tell RFMIX to which group that individual belongs (target, ref1, ref2, ...)
+```
+bcftools query -l ref_combination1.recode.vcf | sort > samples_REF.txt
+```
+Rcode:
+
+```
+#I had already data.frames with the individuals belonging to each group (spain, yoruba, america_ref)
+sample_file=read.table("samples_REF.txt") 
+sample_file[,2]=NA
+sample_file[,2]=as.character(sample_file[,2])
+
+for (rowID in 1:nrow(sample_file)){
+  if( sample_file[rowID,1]%in% spain$V2) {
+    sample_file[rowID,2]="Spain"} 
+    else {if(sample_file[rowID,1]%in% yoruba$V2) {
+    sample_file[rowID,2]="Yoruba"
+    }else{if(sample_file[rowID,1]%in% america_ref$V2) {
+      sample_file[rowID,2]="America"} }}}
+
+
+write.table(sample_file, "sample_ref_file.txt", row.names = F, col.names = F, quote = F)
+```
+
 
 The map file that we created before is not valid for RFMIX, we just need a very simple R code:
 ```
@@ -95,6 +118,12 @@ map[,3]=map[,3]*100
 write.table(map, "ref_map_rfmix_cM.map")
 ```
 
+### Now we can start!!!
+I run it on our server, it took around 24h using 8 cores with more or less 400 individuals. 
+
+```
+for chr in {1..22}; do rfmix -f dataset_admix.recode.vcf.gz -r dataset_reference.recode.vcf.gz -m sample_ref_file.txt -g ref_map_rfmix_cM.map -o result_combination1_chr$chr -c 0.2 -r 0.2 -w 0.2 -e 1 --reanalyze-reference  -n 5 -G 11 --chromosome=$chr -n 8 ; done
+```
 
 
 

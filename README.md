@@ -1,3 +1,3 @@
-**PopGen with Epi**
+**Local Ancestry analysis for masking**
 
 

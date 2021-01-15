@@ -1,3 +1,2 @@
 **PopGen with Epi**
-
-Here I left some of the scripts that I have been using during my PhD. 
+I used ALDER 1.03 to date the admixture date with Spanish colonizers. 

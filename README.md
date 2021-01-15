@@ -110,7 +110,7 @@ find -type f -empty -delete
 ```
 
 
-## 3.Select the best parents 
+## 3. Select the best parents 
 In my case, it was not difficult as I was mainly intereset in a few populations, so I just picked a partent that with work for all of them. You might try to find a better method if you have a lot of populations.
 
 

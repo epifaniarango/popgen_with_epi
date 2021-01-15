@@ -164,7 +164,7 @@ order=order %>%
 vec1=order(match(all4$V4,order$V1))
 all4=all4[ vec1,]
 
-all4=all4 %>% arrange()
+
 gg =ggplot(all4, aes(x=AgeCalendarYear,y=fct_inorder(V4)))+
   geom_point()+
   geom_errorbarh(aes(xmin=Min,xmax=Max), alpha=0.2)+

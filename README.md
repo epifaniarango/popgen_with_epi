@@ -113,7 +113,7 @@ cat *gap0.5.IBD.Merged > all.refinedIBD_gap0.5.Merged
 ```
 
 ## 3. Plotting and analysis
-For doing the same approach as in Ioannidis2020, on this script we account for fragments over 7 cM and sometimes 2 pairs of individuals share more than 1 fragment, we need to remove those connections. 
+For doing the same approach as in Ioannidis 2020, on this script we account for fragments over 7 cM and sometimes 2 pairs of individuals share more than 1 fragment, we need to remove those connections. 
 Rscrpipt for processing and plotting. In this case I am only going to show the processing that I did for only fragments over 7cM:
 ```
 setwd("~/your_folder/")

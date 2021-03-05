@@ -112,11 +112,17 @@ done
 cat *gap0.5.IBD.Merged > all.refinedIBD_gap0.5.Merged
 ```
 
+## 3. Plotting and analysis
+For doing the same approach as in Ioannidis2020, on this script we account for fragments over 7 cM and sometimes 2 pairs of individuals share more than 1 fragment, we need to remove those connections. 
 Rscrpipt for processing and plotting. In this case I am only going to show the processing that I did for only fragments over 7cM:
 ```
 setwd("~/your_folder/")
 ibd<-read.table("all.refinedIBD0.5.Merged", as.is=T)
 colnames(ibd)<-c("firstID","firstHapIndex","secondID","secondHapIndex", "chromosome", "start","end","LOD","length")
+
+ibd=ibd[ibd$length>7, ]
+
+ibd=ibd[!duplicated(ibd[c(1,2)],),]
 
 #infoID.csv is a file with the geographical information of your samples
 infoID<-read.csv("infoID.csv",header=T, as.is=T , comment.char = "", fill=T)  #info file each line one individual
@@ -185,40 +191,6 @@ bestmirror$source1<-ibd$source2
 bestmirror$source2<-ibd$source1
 bestdouble<-rbind(ibd,bestmirror)
 
-# now plot as symmetric matrix 
-
-library(ggplot2)
-p<-ggplot(bestdouble, aes(x = source1, y = source2,size=length)) + 
-  labs(x="source1", y="source2", title="IBD sharing") +
-  geom_point(shape=21) +
-  scale_color_gradient(low="lightblue", high="red") +  # the color code corresponds to the LOD score
-  theme_bw() + theme(axis.text.x=element_text(size=9, angle=0, vjust=0.3),
-                     axis.text.y=element_text(size=9),
-                     plot.title=element_text(size=11),
-                     legend.text=element_text(size=7)) +
-  theme(axis.text.x = element_text(angle = 45, vjust=1, hjust=1)) +
-  scale_x_discrete(limits=poporder)+       #the poporder can be a different population order that you want to display in the plot
-  scale_y_discrete(limits=poporder)
-p
-ggsave("IBDsharingblocksSymmetricPlay.pdf", useDingbats=FALSE)
-
-# the plot above did not have the diagonal (within pop sharing)
-
-
-diagonal<-ibd[which(ibd$source1==ibd$source2),]
-pintern<-ggplot(diagonal, aes(x = source1,y=length,color=LOD)) + 
-  labs(x="source1", title="IBD sharing within population") +
-  geom_point(shape=21) +
-  scale_color_gradient(low="lightblue", high="red") +
-  theme_bw() + theme(axis.text.x=element_text(size=9, angle=0, vjust=0.3),
-                     axis.text.y=element_text(size=9),
-                     plot.title=element_text(size=11),
-                     legend.text=element_text(size=7)) +
-  theme(axis.text.x = element_text(angle = 45, vjust=1, hjust=1)) +
-  scale_x_discrete(limits=poporder)
-pintern
-ggsave("IBDsharingblocksWithinPopPlay.pdf", useDingbats=FALSE)
-
 #------------------------------------------------------------------
 # Matrices of exchange between populations
 #------------------------------------------------------------------
@@ -240,6 +212,8 @@ for (i in 1:length(poporder)){
   }
 }
 write.table(matrixIBD,"matrix_refinedIBD_merge_sharing.txt", sep="\t")
+
+
 
 # make a matrix with the average length of blocks
 matrixIBDAverageLength<-matrix(NA, length(poporder),length(poporder), dimnames=list(poporder, poporder))
@@ -281,7 +255,7 @@ for (i in 1:length(poporder)){
 write.table(matrixIBDTotLength,"matrix_IBD_totalLength.txt", sep="\t")
 
 pops<-table(infoID$PopName)
-#pops<-pops[which(pops>0)]
+pops<-pops[which(pops>0)]
 pops<-pops[rownames(matrixIBD)]
 
 #adjust for population size
@@ -294,6 +268,7 @@ for (i in 1:length(poporder)){
   }
 }
 write.table(matrixIBDadjustpopsize,"matrix_IBDsharingAdjustPopSize.txt", sep="\t")
+
 
 matrixIBDadjustpopsizelength<-matrixIBDTotLength
 for (i in 1:length(poporder)){
@@ -324,11 +299,15 @@ meltIBD$lengthadjust<-meltIBDlengthadjuxt$value
 
 
 meltIBD2<-meltIBD[-(which(meltIBD$source1==meltIBD$source2)),] #exclude same pop sharing
+meltIBD2$prob=meltIBD2$n_sharing/(333/2)
+
+
 
 # you can filter for more significant pairs, like pairs that share more than once, or more than the median
 meltIBD22<-meltIBD2[which(meltIBD2$n_sharing!=0),]
+meltIBD22$prob=meltIBD22$n_sharing/(333/2)
 meltIBD22<-meltIBD2[which(meltIBD2$n_sharing>1),] # more than once
-meltIBD22<-meltIBD22[which(meltIBD22$sharingadjust>median(meltIBD22$sharingadjust)),] #more than the median
+#meltIBD22<-meltIBD22[which(meltIBD22$sharingadjust>median(meltIBD22$sharingadjust)),] #more than the median
 
 gg<-ggplot(meltIBD22,aes(x=source1, y=source2, fill=sharingadjust, size=lengthadjust))+
   geom_point(shape=21)+
@@ -340,9 +319,20 @@ gg<-ggplot(meltIBD22,aes(x=source1, y=source2, fill=sharingadjust, size=lengthad
 gg
 
 
-ggsave("matrixAdjustSize_length_sharing_IBDmerged_more_than_the_median.pdf", useDingbats=FALSE) # Figure 4A
+ggsave("matrixAdjustSize_length_sharing_IBDmerged_.pdf", useDingbats=FALSE, width = 12, height = 10) # Figure 4A
+
+gg<-ggplot(meltIBD22,aes(x=source1, y=source2, fill=sharingadjust, size=n_sharing))+
+  geom_point(shape=21)+
+  theme_bw() +
+  scale_fill_gradient(name="Population size adjustment", low="cyan3",high="darkorchid")+
+  theme(axis.text.x = element_text(angle = 45, vjust=1, hjust=1)) +
+  scale_x_discrete(limits=poporder)+
+  scale_y_discrete(limits=poporder)+
+  scale_size(name = "Pairs of sharing")
+gg
 
 
+ggsave("matrixAdjustSize_Nsharing_IBDmerged_.pdf", useDingbats=FALSE, width = 12, height = 10) 
 
 # ------------------------------------------------------------------------
 # geographic distances
@@ -366,9 +356,7 @@ geomelt<-melt(MatrixGeo)
 
 # ------------------------------------------------------------------------
 ### SECTION 2
-# map visualization with ggplot and with "connecting flight" mode.  - Figure 4B
-## now the map with network connection like in Barbieri et al. 2017 Sci Rep
-# https://www.nature.com/articles/s41598-017-17728-w/figures/5
+
 
 
 meltIBD3<-meltIBD2[which(meltIBD2$source1%in%geomelt$Var1),]
@@ -384,8 +372,8 @@ meltIBD3<-meltIBD3[which(meltIBD3$n_sharing!=0),]
 meltIBD3$lengthGeo<-meltIBD3$lengthadjust*as.numeric(meltIBD3$geodist)
 meltIBD3$sharingGeo<-meltIBD3$sharingadjust*as.numeric(meltIBD3$geodist)
 
-meltIBD33<-meltIBD3[which(meltIBD3$n_sharing>1),]
-meltIBD33<-meltIBD33[which(meltIBD33$sharingadjust>median(meltIBD33$sharingadjust)),]
+#meltIBD33<-meltIBD3[which(meltIBD3$n_sharing>1),]
+#meltIBD33<-meltIBD33[which(meltIBD33$sharingadjust>median(meltIBD33$sharingadjust)),]
 
 library(maps)
 library('geosphere')
@@ -395,115 +383,39 @@ col.2 <- adjustcolor("mediumorchid4", alpha=0.4)
 edge.pal <- colorRampPalette(c(col.1, col.2), alpha = TRUE)
 edge.col <- edge.pal(100)
 
-pdf("mapSharingNetworkRefinedIBD_.pdf")
-
-
-
-map(database = "world", regions = ".",ylim=c(-60,60), xlim=c(-105,-40), col="grey90", fill=TRUE,  lwd=0.1)
-points(x=infoID$lon, y=infoID$lat, pch=19,  cex=0.5, col="mediumturquoise")
-
-for(i in 1:nrow(meltIBD33))  {
-  node1 <- infoID[infoID$PopName == as.character(meltIBD33[i,]$source1),]
-  node2 <- infoID[infoID$PopName == as.character(meltIBD33[i,]$source2),]
-  
-  arc <- gcIntermediate(as.numeric(c(node1[1,]$lon, node1[1,]$lat)), 
-                        as.numeric(c(node2[1,]$lon, node2[1,]$lat)), 
-                        n=1, addStartEnd=TRUE )
-  edge.ind <- round(100*meltIBD33[i,]$sharingadjust / max(meltIBD33$sharingadjust))
-  
-  lines(arc, col=edge.col[edge.ind], lwd=edge.ind/10)
-}
-text(x=as.numeric(infoID$lon), y=as.numeric(infoID$lat), labels=infoID$PopName,  cex=0.1, col="black")
-
-dev.off()
-
-
-
-
-pdf("mapSharingNetworkRefinedIBD_zoom.pdf")
-
-
-#here you put your desired coordinates
-map(database = "world", regions = ".",ylim=c(-60,20), xlim=c(-90,-30), col="grey90", fill=TRUE,  lwd=0.1)
-points(x=infoID$lon, y=infoID$lat, pch=19,  cex=0.5, col="mediumturquoise")
-
-for(i in 1:nrow(meltIBD333))  {
-  node1 <- infoID[infoID$PopName == as.character(meltIBD333[i,]$source1),]
-  node2 <- infoID[infoID$PopName == as.character(meltIBD333[i,]$source2),]
-  
-  arc <- gcIntermediate(as.numeric(c(node1[1,]$lon, node1[1,]$lat)), 
-                        as.numeric(c(node2[1,]$lon, node2[1,]$lat)), 
-                        n=1, addStartEnd=TRUE )
-  edge.ind <- round(100*meltIBD333[i,]$sharingadjust / max(meltIBD33$sharingadjust))
-  
-  lines(arc, col=edge.col[edge.ind], lwd=edge.ind/10)
-}
-text(x=as.numeric(infoID$lon), y=as.numeric(infoID$lat), labels=infoID$PopName,  cex=0.1, col="black")
-
-dev.off()
-
-#SAME Maps higher than the mean 
-
-library(maps)
-library('geosphere')
-
-col.1 <- adjustcolor("mediumorchid", alpha=0.4)
-col.2 <- adjustcolor("mediumorchid4", alpha=0.4)
-edge.pal <- colorRampPalette(c(col.1, col.2), alpha = TRUE)
-edge.col <- edge.pal(100)
-
-pdf("mapSharingNetworkRefinedIBD_higer_mean.pdf")
-
-
-
-map(database = "world", regions = ".",ylim=c(-60,60), xlim=c(-105,-40), col="grey90", fill=TRUE,  lwd=0.1)
-points(x=infoID$lon, y=infoID$lat, pch=19,  cex=0.5, col="mediumturquoise")
-
-for(i in 1:nrow(meltIBD33))  {
-  node1 <- infoID[infoID$PopName == as.character(meltIBD33[i,]$source1),]
-  node2 <- infoID[infoID$PopName == as.character(meltIBD33[i,]$source2),]
-  
-  arc <- gcIntermediate(as.numeric(c(node1[1,]$lon, node1[1,]$lat)), 
-                        as.numeric(c(node2[1,]$lon, node2[1,]$lat)), 
-                        n=1, addStartEnd=TRUE )
-  edge.ind <- round(100*meltIBD33[i,]$sharingadjust / max(meltIBD33$sharingadjust))
-  
-  lines(arc, col=edge.col[edge.ind], lwd=edge.ind/10)
-}
-text(x=as.numeric(infoID$lon), y=as.numeric(infoID$lat), labels=infoID$PopName,  cex=0.1, col="black")
-
-dev.off()
 
 #Now I want to do the same but without the connections with Spain and also not ploting North and MesoAmerica
 
-spain=c("Spanish_Aragon","Spanish_Balearic","Spanish_Cantabria","Spanish_CastillaLaMancha","Spanish_CastillaLeon","Spanish_Cataluna","Spanish_Andalucia","Spanish_Extremadura","Spanish_Murcia","Spanish_Valencia","Spanish_Galicia")
+spain=c("Spain")
 `%out%` <- function(a,b) ! a %in% b
-meltIBD333=subset(meltIBD33, meltIBD33$source1 %out% spain & meltIBD33$source2 %out% spain)
+meltIBD3=subset(meltIBD3, meltIBD3$source1 %out% spain & meltIBD3$source2 %out% spain)
 
 
 
 
-pdf("mapSharingNetworkRefinedIBD_zoom.pdf")
+pdf("mapSharingNetworkRefinedIBD2_zoom.pdf")
 
 
 
 map(database = "world", regions = ".",ylim=c(-60,20), xlim=c(-90,-30), col="grey90", fill=TRUE,  lwd=0.1)
-points(x=infoID$lon, y=infoID$lat, pch=19,  cex=0.5, col="mediumturquoise")
+#points(x=infoID$lon, y=infoID$lat, pch=19,  cex=0.5, col="mediumturquoise")
 
-for(i in 1:nrow(meltIBD333))  {
-  node1 <- infoID[infoID$PopName == as.character(meltIBD333[i,]$source1),]
-  node2 <- infoID[infoID$PopName == as.character(meltIBD333[i,]$source2),]
+for(i in 1:nrow(meltIBD3))  {
+  node1 <- infoID[infoID$PopName == as.character(meltIBD3[i,]$source1),]
+  node2 <- infoID[infoID$PopName == as.character(meltIBD3[i,]$source2),]
   
   arc <- gcIntermediate(as.numeric(c(node1[1,]$lon, node1[1,]$lat)), 
                         as.numeric(c(node2[1,]$lon, node2[1,]$lat)), 
                         n=1, addStartEnd=TRUE )
-  edge.ind <- round(100*meltIBD333[i,]$sharingadjust / max(meltIBD33$sharingadjust))
+  edge.ind <- round(round(15*meltIBD3[i,]$sharingadjust / max(meltIBD3$sharingadjust)))
   
-  lines(arc, col=edge.col[edge.ind], lwd=edge.ind/10)
+  lines(arc, col=edge.col[edge.ind], lwd=edge.ind)
 }
+
 text(x=as.numeric(infoID$lon), y=as.numeric(infoID$lat), labels=infoID$PopName,  cex=0.1, col="black")
 
 dev.off()
+
 
 
 

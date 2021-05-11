@@ -130,7 +130,7 @@ for chr in {1..22}; do grep -v "^##" /phased_chr/chrom${chr}_phased_order.vcf | 
 
 ### 2.3 Processing the output
 
-The code will not work if the names of the files are different. I created the script under R v4.0.3, be aware that things might not work with other version. You can use a conda environment to select the desired version. I create here 2 types of masking: diploid and pseudohaploid.
+The code will not work if the names of the files are different. I created the script under R v4.0.3, be aware that things might not work with other version. You can use a conda environment to select the desired version. The script is above. I create here 2 types of masking: diploid and pseudohaploid.
 ```
 mkdir masking
 

@@ -3,10 +3,7 @@ rm(list=ls())
 library(tidyverse)
 
 
-
-
 ####Processing
-
 
 #coordinates to know who are the admix americans and the ref americans
 all=read.table("Samples_information.txt")
@@ -18,7 +15,6 @@ orden=read.table("order.txt")
 fam=read.table("dataset.fam")
 
 fam=fam[order(match(fam$V2,orden$V1)),]
-
 
 
 #subset only the american individuals that are the ones that we need
@@ -56,7 +52,6 @@ combinaciones$Var3=paste(combinaciones$Var1,combinaciones$Var2,sep = "")
 
 
 
-
 for (y in 1:22){
   
   
@@ -79,8 +74,6 @@ for (y in 1:22){
   good_pp[good_pp<0.9]=0
   
   
-  
-  
   viterbi1[which(good_pp==0, arr.ind = TRUE)] = 0
   
   
@@ -89,7 +82,6 @@ for (y in 1:22){
   
   
   viterbi1=viterbi1[,1:america[length(america)]]
-  
   
   
   alleles=read.table(paste("chrom",y,"_rfmix.allelesRephased0_sep.txt",sep=""),sep="")
@@ -105,18 +97,8 @@ for (y in 1:22){
     
   }
   
-  
   alleles_ref=alleles[,america_ref]
   alleles_america=alleles[,america]
-  
-  
-  
-  
-  
-  
-  
-  
-  
   
   
   #now the masking, every position that is not a 3 on the viterbi file should be
@@ -202,7 +184,7 @@ for (y in 1:22){
   alleles_america1[which(diploid==5, arr.ind = TRUE)] = 0
   
   
-  # now we merge with the ref
+  # merge with the ref
   
   
   diploid=cbind(alleles_america1, alleles_ref)

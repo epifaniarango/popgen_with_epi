@@ -120,7 +120,7 @@ I run it on our server, it took around 24h per chr with 10 cores. If you change 
 cd /your_path/RFMix_v1.5.4 
 for chr in {1..22}; do python2 RunRFMix.py PopPhased -G 11 --num-threads 10 -n 5 --forward-backward --use-reference-panels-in-EM -e 2 -w 0.2 /your_path/phased_chr/chrom${chr}.alleles /your_path/sample_file.txt /your_path/phased_chr/referenceFromMyDataCentimorgan_Chr${chr}.map -o /your_path/chrom${chr}_rfmix ; done
 ```
-When the analysis run these simpel commands, we will need them on the downstream analysis:
+When the analysis is done, run these simple commands. We will need them on the downstream analysis:
 
 ```
 for chr in {1:22}; do cat chrom${chr}_rfmix.allelesRephased1.txt |  sed 's/./& /g' > chrom${chr}_rfmix.allelesRephased1_sep.txt ; done
@@ -130,7 +130,11 @@ for chr in {1..22}; do grep -v "^##" /phased_chr/chrom${chr}_phased_order.vcf | 
 
 ### 2.3 Processing the output
 
-The code will not work if the names of the files are different. I created the script under R v4.0.3, be aware that things might not work with other version. You can use a conda environment to select the desired version. 
+The code will not work if the names of the files are different. I created the script under R v4.0.3, be aware that things might not work with other version. You can use a conda environment to select the desired version. I create here 2 types of masking: diploid and pseudohaploid.
 ```
 mkdir masking
+
+Rscript masking_for_github.R
+
 ```
+Thank you Jonas for your help =)

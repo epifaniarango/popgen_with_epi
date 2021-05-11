@@ -60,8 +60,8 @@ combinaciones$Var3=paste(combinaciones$Var1,combinaciones$Var2,sep = "")
 for (y in 1:22){
   
   
-  posterior1=read.table(paste("chrom",y,"_rfmix.0.ForwardBackward.txt",sep = ""),sep = "")
-  viterbi1=read.table(paste("chrom",y,"_rfmix.0.Viterbi.txt",sep = ""),sep = "")
+  posterior1=read.table(paste("chrom",y,"_rfmix.1.ForwardBackward.txt",sep = ""),sep = "")
+  viterbi1=read.table(paste("chrom",y,"_rfmix.1.Viterbi.txt",sep = ""),sep = "")
   
   
   #Process RFMIX output. I need to get rid of the low posterior prob. for each call. (<0.9)

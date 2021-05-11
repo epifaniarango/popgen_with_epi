@@ -5,7 +5,7 @@ For local ancestry analysis, we need first to do the haplotyple estimation or ph
 - PLINK
 - BCFTOOLS
 - BEAGLE
-- RFMIX
+- RFMIX v1.5.4
 - VCFTOOLS
 
 The scripts are not all mine. I picked some codes from https://github.com/chiarabarbieri/SNPs_HumanOrigins_Recipes and did a few changes.
@@ -16,7 +16,10 @@ The scripts are not all mine. I picked some codes from https://github.com/chiara
 ```
 plink --bfile  yourfile  --allow-no-sex --recode vcf-iid --alleleACGT --out  dataset
 ```
-
+RFMIX v1.5.4 does not accept invariant sites. 
+```
+bcftools view -v snps -o dataset_noinvariant.vcf dataset.vcf
+```
 Compress and index the file
 
 ```
@@ -67,12 +70,14 @@ conda activate BEAGLE
 
 for chromosome in {1..22}; do
 	seed=$RANDOM
-    beagle gt=splitted_${chromosome}.vcf.gz  map=referenceFromMyDataCentimorgan_Chr${chromosome}.map window=20 seed=$seed out=BeaglePhased${chromosome} nthreads=16
+    beagle gt=splitted_${chromosome}.vcf.gz  map=referenceFromMyDataCentimorgan_Chr${chromosome}.map window=20 seed=$seed out=chrom${chromosome}_phased nthreads=16
 done
 ```
 
 ## 2. Local ancestry inference with RFMIX
-First we need to put all the chromose back together and prepared 2 vcf files: one with the target individuals and one with the reference panel. For that you will need a plain text file with one column, each row with the name of an individual, one for the target and one for the reference individuals (ref_filter.txt and admix_ind_america.txt). I selected the reference panel based on a previous run of admixture with a simple Rscript. 
+I used the older version of RFMIX due to certain incosistency that I was seeing on the output on the v2. To run this script you need to have 2 files already prepared:
+# - Order: 
+First we need to put all the chromose back together and prepared 2 vcf files: one with the target individuals and one with the reference panel. For that you will need a plain text file with one column, each row with the name of an individual, one for the target and one for the reference individuals (ref_filter.txt and admix_ind_america.txt). I selected the reference panel based on a previous run of admixture with a simple Rscript.
 
 ### 2.1 Prepare input files
 ```

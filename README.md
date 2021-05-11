@@ -1,5 +1,7 @@
 # Local ancestry analysis for masking
 
+This script is designed to mask African and European ancestry from American samples. It could be used for other populations with small adjutments. In the original plink dataset you need to have a the admixed populations and the reference panels. For the American reference panel, we pick individuals that according to admixture have more than 0.999 American ancestry. The design of the reference panel is not provided on this script. 
+
 For local ancestry analysis, we need first to do the haplotyple estimation or phasing. I will start describing the analysis from a PLINK file where you should have the reference populations and the target populations. You should install these softwares. (I do everything thorugh conda):
 
 - PLINK
@@ -8,13 +10,18 @@ For local ancestry analysis, we need first to do the haplotyple estimation or ph
 - RFMIX v1.5.4
 - VCFTOOLS
 
-The scripts are not all mine. I picked some codes from https://github.com/chiarabarbieri/SNPs_HumanOrigins_Recipes and did a few changes.
+I picked some codes from https://github.com/chiarabarbieri/SNPs_HumanOrigins_Recipes and did a few changes.
 
 
 
 ## 1. Phasing with BEAGLE
 ```
 plink --bfile  yourfile  --allow-no-sex --recode vcf-iid --alleleACGT --out  dataset
+
+#We will use this later
+for chr in {1..22}; do \
+plink --bfile yourfile --allow-no-sex --chr $chr --recode --out dataset_chr${chr}; \
+done
 ```
 RFMIX v1.5.4 does not accept invariant sites. 
 ```
@@ -39,16 +46,16 @@ done
 
 Move the files to a different folder
 ```
-mkdir BEAGLE_files
-mv *.vcf.gz BEAGLE_files
-cd BEAGLE_files
+mkdir phased_chr
+mv *.vcf.gz  phased_chr
+cd  phased_chr
 ```
 
 
 BEAGLES requires a genetic map (R code)
 ```
 
-setwd("~/BEAGLE_files/")
+setwd("~/phased_chr/")
 
 mapBeagle<-read.table("dataset.map", sep="")
 mapBeagle[,2]<-"." # little tweak to add a dot between values. 
@@ -72,250 +79,58 @@ for chromosome in {1..22}; do
 	seed=$RANDOM
     beagle gt=splitted_${chromosome}.vcf.gz  map=referenceFromMyDataCentimorgan_Chr${chromosome}.map window=20 seed=$seed out=chrom${chromosome}_phased nthreads=16
 done
+
+for chr in {1..22}; do tabix -p vcf chrom${chr}_phased.vcf.gz ; done
+
 ```
 
 ## 2. Local ancestry inference with RFMIX
-I used the older version of RFMIX due to certain incosistency that I was seeing on the output on the v2. To run this script you need to have 2 files already prepared:
-# - Order: 
-First we need to put all the chromose back together and prepared 2 vcf files: one with the target individuals and one with the reference panel. For that you will need a plain text file with one column, each row with the name of an individual, one for the target and one for the reference individuals (ref_filter.txt and admix_ind_america.txt). I selected the reference panel based on a previous run of admixture with a simple Rscript.
+I used the older version of RFMIX due to certain incosistency that I was seeing on the output on the v2. To run this script you need to have 2 files already prepared on your own with a simple script:
+#### - Order: a txt file with one column and the name of each individual per row in the desigened order. 1) Admixed samples need to go first 2) European individuals 3) African individuals 4) American samples without admixture as the reference panel of the Americas (My file is called order.txt)
+
+#### - Sample information: the same as the previous file but adding a second column where the admixed Americans will be coded as 0, Europeans as 1, Africans as 2 and the reference Americans as 3. Don't change the code, or the order, my script might not work then.(Sample_information.txt)
 
 ### 2.1 Prepare input files
+The plink samples order follow usually an alphabethical order. We need to change this and follow the order that we already pre-defined. After this we need to change vcf format to the RFMIX format (alleles).
 ```
-bcftools concat BeaglePhased{1..22}.vcf.gz -Oz -o dataset_phased.vcf.gz
-bgzip dataset_phased.vcf
-tabix -p vcf dataset_phased.vcf.gz
-
-vcftools --vcf dataset_phased.vcf --keep ref_filter.txt --recode --out dataset_reference
-vcftools --vcf dataset_phased.vcf --keep admix_ind_america.txt --recode --out dataset_admix
+for chr in {1..22}; do bcftools view -S order.txt /phased_chr/chrom${chr}_phased.vcf.gz >  phased_chr/chrom${chr}_phased_order.vcf ; done
+for chr in {1..22}; do cat chrom${chr}_phased_order.vcf  | grep -v '#' | cut -f10- | tr -d  '\t|' > chrom${chr}.alleles ; done
 
 ```
-A class file is also need. It is just basically a file where you tell RFMIX to which group that individual belongs (target, ref1, ref2, ...)
-```
-bcftools query -l ref_combination1.recode.vcf | sort > samples_REF.txt
-```
-Rcode:
+A class file is also need. It is just basically a file where you tell RFMIX to which group that individual belongs (target, ref1, ref2, ...). We will create that file based on the second file I asked you to create. RFMIX asks you to create a code of each HAPLOTYPE, not invidiual. Rcode:
 
 ```
-#I had already data.frames with the individuals belonging to each group (spain, yoruba, america_ref)
-sample_file=read.table("samples_REF.txt") 
-sample_file[,2]=NA
-sample_file[,2]=as.character(sample_file[,2])
-
-for (rowID in 1:nrow(sample_file)){
-  if( sample_file[rowID,1]%in% spain$V2) {
-    sample_file[rowID,2]="Spain"} 
-    else {if(sample_file[rowID,1]%in% yoruba$V2) {
-    sample_file[rowID,2]="Yoruba"
-    }else{if(sample_file[rowID,1]%in% america_ref$V2) {
-      sample_file[rowID,2]="America"} }}}
-
-
-write.table(sample_file, "sample_ref_file.txt", row.names = F, col.names = F, quote = F)
+all=read.table("Sample_information.txt")
+all=all[rep(seq_len(nrow(all)), each = 2), ]
+write.table(t(all$V2),"sample_file.txt",col.names = F, row.names = F, quote = F)
 ```
 
-
-The map file that we created before is not valid for RFMIX, we just need a very simple R code:
+We will need this at some point during the downstream analysis. I am not keeeping track on which folder I am (at least not always, be carefull).
 ```
-#Prepare the map file
-map<-read.table("dataset.map", sep="")
-map=subset(map, map$V1 <23) #only autosomes
-map=map[,c(1,4,3)]
-map[,3]=map[,3]*100
-write.table(map, "ref_map_rfmix_cM.map")
+for i in `seq 22`; do
+
+ grep -v "^##" chrom${i}_phased_order.vcf | cut -f1-3 > snps_${i}
+done
 ```
 
 ### 2.2 Running the program
-I run it on our server, it took around 24h using 8 cores with more or less 400 individuals. You should read the manual to select the parameters that work for your data. 
+I run it on our server, it took around 24h per chr with 10 cores. If you change some of the options, it would take less. Everything that you need to know to get the programm in your computer is here (https://github.com/indraniel/rfmix). You need to run it from the folder where the programme is. 
 
 ```
-for chr in {1..22}; do rfmix -f dataset_admix.recode.vcf.gz -r dataset_reference.recode.vcf.gz -m sample_ref_file.txt -g ref_map_rfmix_cM.map -o rfmix_chr$chr -c 0.2 -r 0.2 -w 0.2 -e 1 --reanalyze-reference  -n 5 -G 11 --chromosome=$chr -n 8 ; done
+cd /your_path/RFMix_v1.5.4 
+for chr in {1..22}; do python2 RunRFMix.py PopPhased -G 11 --num-threads 10 -n 5 --forward-backward --use-reference-panels-in-EM -e 2 -w 0.2 /your_path/phased_chr/chrom${chr}.alleles /your_path/sample_file.txt /your_path/phased_chr/referenceFromMyDataCentimorgan_Chr${chr}.map -o /your_path/chrom${chr}_rfmix ; done
+```
+When the analysis run these simpel commands, we will need them on the downstream analysis:
+
+```
+for chr in {1:22}; do cat chrom${chr}_rfmix.allelesRephased1.txt |  sed 's/./& /g' > chrom${chr}_rfmix.allelesRephased1_sep.txt ; done
+
+for chr in {1..22}; do grep -v "^##" /phased_chr/chrom${chr}_phased_order.vcf | cut -f4-5 > /phased_chr/chrom${chr}_snp_coding ; done
 ```
 
 ### 2.3 Processing the output
-Sometimes there are 2 or more assignation for a fragment the probability that appears it is from a SNP that is in the middle of the fragment. I don't really know why but I need to get rid of those fragments. Also I only took ancestry assignation with a posterior probability higher than 90%. I am not a bioinformatician, sorry for the unefficient scripts! I am no the best of keeping track of every step, feel free to ask!
 
-
+The code will not work if the names of the files are different. I created the script under R v4.0.3, be aware that things might not work with other version. You can use a conda environment to select the desired version. 
 ```
-#R
-setwd("your_desired_folder_where_your_files_are")
-
-
-for (y in 1:22){
-  posterior=read.table(paste("rfmix_chr",y,".fb.tsv", sep = ""),sep = "", header =TRUE)
-  viterbi=read.table(paste("rfmix_chr",y,".msp.tsv", sep = ""),sep = "")
-  
-  #In a few cases there are more than one posterior assignation for a fragment.
-  #here we make sure that the lines match and in case there are several asignation, we pick the 
-  #one that is more similar no the number of snps that the fragment have on the viterbi file
-  good_pp=data.frame(matrix(NA, nrow = nrow(viterbi), ncol = ncol(posterior)))
-  for(rowId in 1:nrow(viterbi)){
-    
-    a=subset(posterior, posterior[,2]>=viterbi[rowId,2]& posterior[,2]<=viterbi[rowId,3])
-    
-    if(nrow(a)==1){
-      good_pp[rowId,]=a[1,]
-    }else{good_pp[rowId,]=a[which.min(abs(a[,4] - viterbi[rowId,6])),]}
-  }
-  
-  #Change the nomenclature of the ancestries, to make 0 missing data
-  viterbi_calls=viterbi[,-c(1:6)]
-  for (call in rev(1:ancestry_num)) {
-    viterbi_calls[viterbi_calls == call-1] <- call
-  }
-  
-  #Process RFMIX output. I need to get rid of the low posterior prob. for each call. (<0.9)
-  fb=data.frame(matrix(NA, nrow = nrow(good_pp), ncol = (ncol(good_pp)-4)/3))
-  lista=list(seq(5, ncol(a),3),seq(7, ncol(a),3))
-  #Pick only the posterior probability if the call
-  for(rowId in 1:nrow(fb)){
-    for (colId in  1:ncol(fb)){
-      vecprob=good_pp[rowId,lista[[1]][colId]:lista[[2]][colId]]
-      fb[rowId,colId]=max(vecprob)
-    }
-  }
-  
-  #Replace the calls with PP<0.9 to O (missing data)
-  fragments_call=data.frame(matrix(NA, nrow = nrow(fb), ncol = ncol(fb)))
-  for(rowId in 1:nrow(fb)){
-    for (colId in  1:ncol(fb)){
-      if(fb[rowId,colId]>0.9){fragments_call[rowId,colId]=viterbi_calls[rowId,colId]}else{fragments_call[rowId,colId]=viterbi_calls[rowId,colId]=0}
-    }
-  }
-  
-  
-  fragments_call=cbind(viterbi[,1:6],fragments_call)
-  
-  write.table(fragments_call, file=paste("fragment_call_chr",y,".txt", sep = ""), row.names = F, col.names = F, quote = F)
-  write.table(fragments_call,"fragment_call_all_chr.txt", col.names=FALSE ,row.names=FALSE, quote=F, sep = "\t", append = T)
-  
-}
-
-```
-
-
-### 2.4 Plotting individuals
-It is not really necessary, but... it looks nice xD
-
-
-
-## 3. Masking
-In this case, I will select only the ditypes (same ancestry in both alleles). This script is quite unefficient, I just put on the server with 10 cores. It actually didn't take that much. In this case, I only keep the American ancestry
-
-```
-#!/usr/bin/env Rscript
-
-
-
-install.packages("whatever", lib="path/to/folder")
-.libPaths(c(.libPaths(), "path/to/folder"))
-
-setwd("")
-#install.packages("vroom")
-
-library(vroom)
-ditypes_america=vroom("fragment_call_ditypes_america.txt", col_names = F)
-
-
-ditypes_america=subset(ditypes_america, ditypes_america$X6 !=0)
-
-cat("normal for loop\n")
-
-library("foreach")
-library("doParallel")
-
-# normal for loop
-cat("normal for loop\n")
-
-for (i in 1:10) {
-  cat(i, '\n')
-}
-
-# make a cluster of 10 threads, outfile="" makes it so output from each thread is visible in the command line
-cl <- makeCluster(10, outfile="")
-registerDoParallel(cl)
-
-
-cat("multithreaded for loop\n")
-foreach (i=1:22) %dopar% {
-  # any packages used inside the for loop must be loaded here:
-  library("vroom")
-  cat(i, '\n')
-  
-  ditypes_chr=subset(ditypes_america, ditypes_america$X1 ==i)
-  
-  x=as.data.frame(t(ditypes_chr[,-c(1:5)]))
-  x=as.data.frame(x)
-  
-  
-  y=as.numeric(x[1,])
-  y=cumsum(y)
-  y=append(0,y)
-  
-  x=x[-1,]
-  x <- unique(x)
-  
-  ped=vroom(paste("/srv/kenlab/epifania/Chile/8_RFMIX/dataset1/combination1/admix_combination1_chr",i,".ped", sep = ""), col_names = F, col_types = c(.default = "c"))
-  
-  z=seq(8, ncol(ped),2)
-
-  for (rowId in 1:nrow(x)) {
-    for (colId in 1:ncol(x)) {
-      if(x[rowId, colId]==0){
-        ped[rowId,z[c((y[colId]+1):y[colId+1])]-1]="0"
-        ped[rowId,z[c((y[colId]+1):y[colId+1])]]="0"
-      }
-    }
-  }
-  
-  write.table(ped,file=paste("/srv/kenlab/epifania/Chile/8_RFMIX/dataset1/combination1/admix_combination1_chr",i,"_masked.ped", sep = ""), col.names=FALSE ,row.names=FALSE, quote=F)
-  
-  }
-
-
-
-
-
-
-
-
-
-#I also realised that i only took the cases were the ditypes are identical so I only need one 
-#assigment per individual
-x=x[-1,]
-x <- unique(x)
-
-
-ped=vroom("admix_combination1.ped", col_names = F, col_types = c(.default = "c"))
-
-
-#R interpreat some of the "T"as "'TRUE"
-#solved 
-
-z=seq(8, ncol(ped2),2)
-
-ped2=ped
-
-
-library("foreach")
-library("doParallel")
-
-# normal for loop
-
-cl <- makeCluster(3, outfile="")
-registerDoParallel(cl)
-
-cat("normal for loop\n")
-
-z=seq(8, ncol(ped2),2)
-for (rowId in 1:nrow(x)) {
-  for (colId in 1:ncol(x)) {
-    if(x[rowId, colId]==0){
-      ped2[rowId,z[c((y[colId]+1):y[colId+1])]-1]="0"
-      ped2[rowId,z[c((y[colId]+1):y[colId+1])]]="0"
-    }
-  }
-}
-
-
-write.table(ped2,"admix_combination1_masked.ped", row.names = F, col.names = F, quote = F)
+mkdir masking
 ```

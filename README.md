@@ -116,13 +116,20 @@ cat *gap0.5.IBD.Merged > all.refinedIBD_gap0.5.Merged
 For doing the same approach as in Ioannidis 2020, on this script we account for fragments over 7 cM and sometimes 2 pairs of individuals share more than 1 fragment, we need to remove those connections. 
 Rscrpipt for processing and plotting. In this case I am only going to show the processing that I did for only fragments over 7cM:
 ```
+library(tidyverse)
+`%out%` <- function(a,b) ! a %in% b
+
+rescale <- function(x) (x-min(x))/(max(x) - min(x)) * 100
+comb = function(n, x) {
+  factorial(n) / factorial(n-x) / factorial(x)
+}
+
 setwd("~/your_folder/")
 ibd<-read.table("all.refinedIBD0.5.Merged", as.is=T)
 colnames(ibd)<-c("firstID","firstHapIndex","secondID","secondHapIndex", "chromosome", "start","end","LOD","length")
 
 ibd=ibd[ibd$length>7, ]
 
-ibd=ibd[!duplicated(ibd[c(1,2)],),]
 
 #infoID.csv is a file with the geographical information of your samples
 infoID<-read.csv("infoID.csv",header=T, as.is=T , comment.char = "", fill=T)  #info file each line one individual
@@ -151,45 +158,6 @@ poporder=poporder[match(popp$V1,poporder)]
 
 pops<-table(infoID$PopName)
 
-perpop<-matrix(NA,length(poporder),11)
-colnames(perpop)<-c("population","samplesize","numberSharingTot","numbersharingWithin","numberSharingOut","FreqSharingTot","FreqsharingWithin","FreqSharingOut","Mean_lengthsharingWithin","totallenghtsharing","howmanypops")
-perpop[,1]<-poporder
-perpop[,2]<-pops[poporder]
-
-for (i in 1:nrow(perpop)){
-  popp<-poporder[i]
-  within<-which(ibd$source1%in%popp & ibd$source2%in%popp)
-  tempWithin<-ibd[within,]
-  tempTOT<-ibd[union(which(ibd$source1%in%popp),which(ibd$source2%in%popp)),]
-  tempOut<-tempTOT[-which(tempTOT$source1 == tempTOT$source2),]
-  perpop[i,3]<-nrow(tempTOT)
-  perpop[i,4]<-nrow(tempWithin)
-  perpop[i,5]<-nrow(tempOut)
-  perpop[i,6]<-nrow(tempTOT)/as.numeric(perpop[i,2])
-  perpop[i,7]<-nrow(tempWithin)/as.numeric(perpop[i,2])
-  perpop[i,8]<-nrow(tempOut)/as.numeric(perpop[i,2])
-  perpop[i,9]<-mean(tempTOT$length)
-  popvarie<-c(tempTOT$source1,tempTOT$source2)
-  perpop[i,10]<-sum(tempTOT$length)
-  perpop[i,11]<-length(unique(popvarie))
-}
-
-library(reshape2)
-perpop2 <- melt(perpop[,c(1,3,4,5)], id.vars='population')
-write.table(perpop,"popInfoIBDsharing.txt",sep="\t", row.names = F, quote=F)
-perpop<-read.table("popInfoIBDsharing.txt",sep="\t",header=T, as.is=T,comment.char = "", fill=T, quote="")
-
-
-
-#------------------------------------------------------------------
-### SECTION 1 visualize exchange between populations as number of events
-#------------------------------------------------------------------
-
-# create a file to plot a symmetric matrix of exchange
-bestmirror<-ibd
-bestmirror$source1<-ibd$source2
-bestmirror$source2<-ibd$source1
-bestdouble<-rbind(ibd,bestmirror)
 
 #------------------------------------------------------------------
 # Matrices of exchange between populations
@@ -213,26 +181,6 @@ for (i in 1:length(poporder)){
 }
 write.table(matrixIBD,"matrix_refinedIBD_merge_sharing.txt", sep="\t")
 
-
-
-# make a matrix with the average length of blocks
-matrixIBDAverageLength<-matrix(NA, length(poporder),length(poporder), dimnames=list(poporder, poporder))
-
-for (i in 1:length(poporder)){
-  for (k in 1:length(poporder)){
-    pop.i=poporder[i]
-    pop.k=poporder[k]
-    temp<-ibd[union(which(ibd$source1==pop.i),which(ibd$source2==pop.i)),]
-    if (pop.i==pop.k){
-      temp2<-temp[(which(temp$source1==temp$source2)),]
-      matrixIBDAverageLength[i,k]<- mean(temp2$length)
-    } else {
-      tempp<-rbind(temp[which(temp$source1==pop.k),],temp[which(temp$source2==pop.k),])
-      matrixIBDAverageLength[i,k]<-mean(tempp$length)
-    }
-  }
-}
-write.table(matrixIBDAverageLength,"matrix_IBD_averageLength.txt", sep="\t")
 
 
 # make a matrix with the TOTAL length of blocks
@@ -288,8 +236,6 @@ library(ggplot2)
 meltIBD<-melt(matrixIBD)
 colnames(meltIBD)<-c("source1", "source2", "n_sharing")
 
-meltIBDaverage<-melt(matrixIBDAverageLength)
-meltIBD$averageLength<-meltIBDaverage$value
 meltIBDlength<-melt(matrixIBDTotLength)
 meltIBD$totalLength<-meltIBDlength$value
 meltIBDadjuxt<-melt(matrixIBDadjustpopsize)
@@ -299,15 +245,20 @@ meltIBD$lengthadjust<-meltIBDlengthadjuxt$value
 
 
 meltIBD2<-meltIBD[-(which(meltIBD$source1==meltIBD$source2)),] #exclude same pop sharing
-meltIBD2$prob=meltIBD2$n_sharing/(333/2)
 
+#Probability of sharing per population. I rescaled !
+
+meltIBD2$prob=rescale((meltIBD2$sharingadjust)/comb(length(poporder),2))
 
 
 # you can filter for more significant pairs, like pairs that share more than once, or more than the median
+#look first at your data to decide with transformation to use
+
 meltIBD22<-meltIBD2[which(meltIBD2$n_sharing!=0),]
-meltIBD22$prob=meltIBD22$n_sharing/(333/2)
 meltIBD22<-meltIBD2[which(meltIBD2$n_sharing>1),] # more than once
 #meltIBD22<-meltIBD22[which(meltIBD22$sharingadjust>median(meltIBD22$sharingadjust)),] #more than the median
+
+
 
 gg<-ggplot(meltIBD22,aes(x=source1, y=source2, fill=sharingadjust, size=lengthadjust))+
   geom_point(shape=21)+
@@ -320,19 +271,6 @@ gg
 
 
 ggsave("matrixAdjustSize_length_sharing_IBDmerged_.pdf", useDingbats=FALSE, width = 12, height = 10) # Figure 4A
-
-gg<-ggplot(meltIBD22,aes(x=source1, y=source2, fill=sharingadjust, size=n_sharing))+
-  geom_point(shape=21)+
-  theme_bw() +
-  scale_fill_gradient(name="Population size adjustment", low="cyan3",high="darkorchid")+
-  theme(axis.text.x = element_text(angle = 45, vjust=1, hjust=1)) +
-  scale_x_discrete(limits=poporder)+
-  scale_y_discrete(limits=poporder)+
-  scale_size(name = "Pairs of sharing")
-gg
-
-
-ggsave("matrixAdjustSize_Nsharing_IBDmerged_.pdf", useDingbats=FALSE, width = 12, height = 10) 
 
 # ------------------------------------------------------------------------
 # geographic distances
@@ -377,28 +315,30 @@ meltIBD3$sharingGeo<-meltIBD3$sharingadjust*as.numeric(meltIBD3$geodist)
 
 library(maps)
 library('geosphere')
+library(raster)
+library(rgdal)
 
-col.1 <- adjustcolor("mediumorchid", alpha=0.4)
-col.2 <- adjustcolor("mediumorchid4", alpha=0.4)
+#download your desired map from https://www.naturalearthdata.com/
+
+col.1 <- adjustcolor("orange red", alpha=0.4)
+col.2 <- adjustcolor("orange", alpha=0.4)
 edge.pal <- colorRampPalette(c(col.1, col.2), alpha = TRUE)
 edge.col <- edge.pal(100)
 
 
-#Now I want to do the same but without the connections with Spain and also not ploting North and MesoAmerica
 
-spain=c("Spain")
-`%out%` <- function(a,b) ! a %in% b
-meltIBD3=subset(meltIBD3, meltIBD3$source1 %out% spain & meltIBD3$source2 %out% spain)
-
-
-
+g=readGDAL("~/your_path_to_the_map/map.tif")
+g=raster(g)
+#select the desired coordinates 
+domain= c(-130,-25,-60,62)
+g_cut=crop(g,domain)
 
 pdf("mapSharingNetworkRefinedIBD2_zoom.pdf")
 
 
+plot(g_cut, col=rev(hcl.colors(100, palette="Earth")), legend=F, box=F, axes=F)
+points(x=infoID$lon, y=infoID$lat, pch=19,  cex=0.2, col="black")
 
-map(database = "world", regions = ".",ylim=c(-60,20), xlim=c(-90,-30), col="grey90", fill=TRUE,  lwd=0.1)
-#points(x=infoID$lon, y=infoID$lat, pch=19,  cex=0.5, col="mediumturquoise")
 
 for(i in 1:nrow(meltIBD3))  {
   node1 <- infoID[infoID$PopName == as.character(meltIBD3[i,]$source1),]
@@ -407,7 +347,7 @@ for(i in 1:nrow(meltIBD3))  {
   arc <- gcIntermediate(as.numeric(c(node1[1,]$lon, node1[1,]$lat)), 
                         as.numeric(c(node2[1,]$lon, node2[1,]$lat)), 
                         n=1, addStartEnd=TRUE )
-  edge.ind <- round(round(15*meltIBD3[i,]$sharingadjust / max(meltIBD3$sharingadjust)))
+  edge.ind <- round(meltIBD3[i,]$prob)/2
   
   lines(arc, col=edge.col[edge.ind], lwd=edge.ind)
 }

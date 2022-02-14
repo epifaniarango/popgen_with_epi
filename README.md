@@ -102,7 +102,7 @@ A class file is also need. It is just basically a file where you tell RFMIX to w
 ```
 all=read.table("Sample_information.txt")
 all=all[rep(seq_len(nrow(all)), each = 2), ]
-write.table(t(all$V2),"sample_file.txt",col.names = F, row.names = F, quote = F)
+write.table(t(all$V2),"sample_file.txt",col.names = F, row.names = F, quote = F, sep = "\t")
 ```
 
 We will need this at some point during the downstream analysis. I am not keeeping track on which folder I am (at least not always, be carefull).

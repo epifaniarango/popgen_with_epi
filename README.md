@@ -114,7 +114,7 @@ done
 ```
 
 ### 2.2 Running the program
-I run it on our server, it took around 24h per chr with 10 cores. If you change some of the options, it would take less. Everything that you need to know to get the programm in your computer is here (https://github.com/indraniel/rfmix). You need to run it from the folder where the programme is. 
+I ran it on our server, it took around 24h per chr with 10 cores. If you change some of the options, it would take less. Everything that you need to know to get the programm in your computer is here (https://github.com/indraniel/rfmix). You need to run it from the folder where the programme is. 
 
 ```
 cd /your_path/RFMix_v1.5.4 

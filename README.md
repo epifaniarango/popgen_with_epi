@@ -123,7 +123,7 @@ for chr in {1..22}; do python2 RunRFMix.py PopPhased -G 11 --num-threads 10 -n 5
 When the analysis is done, run these simple commands. We will need them on the downstream analysis:
 
 ```
-for chr in {1:22}; do cat chrom${chr}_rfmix.allelesRephased1.txt |  sed 's/./& /g' > chrom${chr}_rfmix.allelesRephased1_sep.txt ; done
+for chr in {1..22}; do cat chrom${chr}_rfmix.allelesRephased2.txt |  sed 's/./& /g' > chrom${chr}_rfmix.allelesRephased2_sep.txt ; done
 
 for chr in {1..22}; do grep -v "^##" /phased_chr/chrom${chr}_phased_order.vcf | cut -f4-5 > /phased_chr/chrom${chr}_snp_coding ; done
 ```

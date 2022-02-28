@@ -55,8 +55,8 @@ combinaciones$Var3=paste(combinaciones$Var1,combinaciones$Var2,sep = "")
 for (y in 1:22){
   
   
-  posterior1=read.table(paste("chrom",y,"_rfmix.1.ForwardBackward.txt",sep = ""),sep = "")
-  viterbi1=read.table(paste("chrom",y,"_rfmix.1.Viterbi.txt",sep = ""),sep = "")
+  posterior1=read.table(paste("chrom",y,"_rfmix.2.ForwardBackward.txt",sep = ""),sep = "")
+  viterbi1=read.table(paste("chrom",y,"_rfmix.2.Viterbi.txt",sep = ""),sep = "")
   
   
   #Process RFMIX output. I need to get rid of the low posterior prob. for each call. (<0.9)
@@ -84,9 +84,9 @@ for (y in 1:22){
   viterbi1=viterbi1[,1:america[length(america)]]
   
   
-  alleles=read.table(paste("chrom",y,"_rfmix.allelesRephased0_sep.txt",sep=""),sep="")
+  alleles=read.table(paste("chrom",y,"_rfmix.allelesRephased2_sep.txt",sep=""),sep="")
   
-  snp_coding=read.table(paste("phased_chr/chrom1_snp_coding",sep=""), header = T)
+  snp_coding=read.table(paste("../phased_chr/chrom1_snp_coding",sep=""), header = T)
   snp_coding$both=paste(snp_coding$REF,snp_coding$ALT,sep = "")
   
   

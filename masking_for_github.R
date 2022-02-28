@@ -6,7 +6,7 @@ library(tidyverse)
 ####Processing
 
 #coordinates to know who are the admix americans and the ref americans
-all=read.table("Samples_information.txt")
+all=read.table("sample_information.txt")
 
 america=c(grep(0, all[,2]))
 america_ref=c(grep(3, all[,2]))

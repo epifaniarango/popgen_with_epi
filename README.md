@@ -100,7 +100,7 @@ for chr in {1..22}; do cat chrom${chr}_phased_order.vcf  | grep -v '#' | cut -f1
 A class file is also need. It is just basically a file where you tell RFMIX to which group that individual belongs (target, ref1, ref2, ...). We will create that file based on the second file I asked you to create. RFMIX asks you to create a code of each HAPLOTYPE, not invidiual. Rcode:
 
 ```
-all=read.table("Sample_information.txt")
+all=read.table("sample_information.txt")
 all=all[rep(seq_len(nrow(all)), each = 2), ]
 write.table(t(all$V2),"sample_file.txt",col.names = F, row.names = F, quote = F, sep = "\t")
 ```

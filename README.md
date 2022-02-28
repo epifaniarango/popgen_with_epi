@@ -129,7 +129,7 @@ for chr in {1..22}; do grep -v "^##" /phased_chr/chrom${chr}_phased_order.vcf | 
 
 mkdir splitted_plink
 
-for chr in {1..22}; do vcftools --gzvcf splitted_${chr}.vcf.gz --plink --out splitted_plink/splitted_${chr}; done
+for chr in {1..22}; do vcftools --vcf  /phased_chr/chrom${chr}_phased_order.vcf --plink --out splitted_plink/splitted_${chr}; done
 ```
 
 ### 2.3 Processing the output

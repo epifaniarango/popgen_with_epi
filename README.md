@@ -88,7 +88,7 @@ for chr in {1..22}; do tabix -p vcf chrom${chr}_phased.vcf.gz ; done
 I used the older version of RFMIX due to certain incosistency that I was seeing on the output on the v2. To run this script you need to have 2 files already prepared on your own with a simple script:
 #### - Order: a txt file with one column and the name of each individual per row in the desigened order. 1) Admixed samples need to go first 2) European individuals 3) African individuals 4) American samples without admixture as the reference panel of the Americas (My file is called order.txt)
 
-#### - Sample information: the same as the previous file but adding a second column where the admixed Americans will be coded as 0, Europeans as 1, Africans as 2 and the reference Americans as 3. Don't change the code, or the order, my script might not work then.(Sample_information.txt)
+#### - Sample information: the same as the previous file but adding a second column where the admixed Americans will be coded as 0, Europeans as 1, Africans as 2 and the reference Americans as 3. Don't change the code, or the order, my script will not work.(sample_information.txt)
 
 ### 2.1 Prepare input files
 The plink samples order follow usually an alphabethical order. We need to change this and follow the order that we already pre-defined. After this we need to change vcf format to the RFMIX format (alleles).

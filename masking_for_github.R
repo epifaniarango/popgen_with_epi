@@ -148,7 +148,7 @@ for (y in 1:22){
   
   write.table(pseudo_ped, file=paste("masking/pseudo_haploid_chr",y,".ped", sep = ""), row.names = F, col.names = F, quote = F)
   
-  map=read.table( paste("dataset_chr",y,".map",sep=""))
+  map=read.table( paste("snps_",y ,sep=""))
   map_rfmix=read.table(paste("phased_chr/referenceFromMyDataCentimorgan_Chr",y,".map",sep=""))
   
   map=subset(map, map$V4 %in% map_rfmix$V4)

@@ -147,4 +147,7 @@ When it is done (around 1 hour)
 for chr in {1..22}; do plink --file pseudo_haploid_chr${chr}  --allow-no-sex --make-bed --out pseudo_haploid_chr${chr} ; done
 plink --allow-no-sex --bfile pseudo_haploid_chr1 --merge-list list.txt --make-bed --out pseudo_haploid
 ```
+
+The plink file pseudo_haploid contains both the masked individuals and the individuals used as a the American reference panel, in these case.
+
 Thank you Jonas for your help =)

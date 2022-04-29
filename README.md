@@ -142,7 +142,7 @@ Rscript masking_for_github.R
 
 ```
 
-When it is done (around 1 hour)
+When it is done (around 1 hour). The text list.txt you can copy it above, 
 ```
 for chr in {1..22}; do plink --file pseudo_haploid_chr${chr}  --allow-no-sex --make-bed --out pseudo_haploid_chr${chr} ; done
 plink --allow-no-sex --bfile pseudo_haploid_chr1 --merge-list list.txt --make-bed --out pseudo_haploid

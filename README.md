@@ -147,8 +147,12 @@ mkdir splitted_plink
 for chr in {1..22}; do vcftools --vcf  /phased_chr/chrom${chr}_phased_order.vcf --plink --out splitted_plink/splitted_${chr}; done
 ```
 
-### 2.3 Processing the output
+### 2.3 Processing the output. MASKING
 
+RFMIX creates several output files, one of them contains the information of the posterior probability of the ancestry assignation for each SNP. The following script selects calls with a higher confidence than 0.9. In litterature, I observed two masking methods, so I decided to evaluate which protocol was better (pseudo or diploid masking). In the diploid masking, for a SNP call to be kept, both sides of the chromosome should have been assigned with the same ancestry (in our case, Native American ancestry) (Fig. 3).
+
+![panel5 (dragged)](https://user-images.githubusercontent.com/60963543/189116108-c383b15e-19c4-4eba-8113-7a3a7d7c4eda.png)
+***Figure 3:*** Visual representation of masking methods. A) diploid and B) pseudohaploid masking of one individual.
 The code will not work if the names of the files are different. I created the script under R v4.0.3, be aware that things might not work with other version. You can use a conda environment to select the desired version. The script is above. I create here 2 types of masking: diploid and pseudohaploid.
 ```
 mkdir masking

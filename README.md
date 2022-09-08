@@ -163,7 +163,8 @@ Rscript masking_for_github.R
 
 ```
 
-When it is done (around 1 hour). The text list.txt you can copy it above, 
+When it is done (around 1 hour). The text list.txt you can copy it above,  (you can do the same with the diploid files called like this : diploid_chr",y,".ped)
+
 ```
 for chr in {1..22}; do plink --file pseudo_haploid_chr${chr}  --allow-no-sex --make-bed --out pseudo_haploid_chr${chr} ; done
 plink --allow-no-sex --bfile pseudo_haploid_chr1 --merge-list list.txt --make-bed --out pseudo_haploid
@@ -171,4 +172,13 @@ plink --allow-no-sex --bfile pseudo_haploid_chr1 --merge-list list.txt --make-be
 
 The plink file pseudo_haploid contains both the masked individuals and the individuals used as a the American reference panel, in these case.
 
-Thank you Jonas for your help =)
+Thank you Jonas for your help with this script =)
+
+## 2. Comparing performance of both methods
+After following both masking protocols, we compared the performance by calculating the percentage of missing data per individual (Fig. 4), and the same f4-statistics mentioned above to compare the performance (Fig. 5).
+![Rplot09](https://user-images.githubusercontent.com/60963543/189121417-7c79fd67-3b62-49d6-ac6e-2b213447621a.png)
+***Figure 4:*** Percentage of missing data per individual after applying A) diploid and B) pseudohaploid masking.
+
+![f4_comparison](https://user-images.githubusercontent.com/60963543/189122958-8a3df657-c833-498a-8c74-9af7414364f0.png)
+***Figure 5:*** Performance of masking methods A) diploid and B) pseudohaploid masking, measured through the statistic f4(Unadmixed American Population, Target Individual, Han, San) being Unadmixed American Populations being Karitiana, Mixe, and Xavante. 
+***Figure 5:*** Performance of masking methods A) diploid and B) pseudohaploid masking, measured through the statistic f4(Unadmixed American Population, Target Individual, Han, San) being Unadmixed American Populations being Karitiana, Mixe, and Xavante. ![image](https://user-images.githubusercontent.com/60963543/189122786-ed3624cf-bd68-40c5-a734-32b4e3cfea2f.png)

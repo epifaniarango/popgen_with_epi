@@ -2,6 +2,14 @@
 rm(list=ls())
 library(tidyverse)
 
+####Functions 
+rowMax <- function(x)apply(x,1, max)
+
+mi_fun <- function(w) {
+  rowSums(viterbi1[,c(w-1,w)], na.rm=TRUE)
+}
+
+
 
 ####Processing
 
@@ -21,14 +29,6 @@ fam=fam[order(match(fam$V2,orden$V1)),]
 #for the downstream analysis
 
 fam=subset(fam, fam$V2 %in% c(unique(all[which(all$V2==0),1]),unique(all[which(all$V2==3),1])) )
-
-
-####Functions 
-rowMax <- function(x)apply(x,1, max)
-
-mi_fun <- function(w) {
-  rowSums(viterbi1[,c(w-1,w)], na.rm=TRUE)
-}
 
 
 
@@ -71,6 +71,7 @@ for (y in 1:22){
   good_pp=sapply(unique(groups), function(i)rowMax(posterior1[,which(groups==i)]))
   good_pp=as.data.frame(good_pp)
   
+  #here you can change if tyou want a higher or lower threeshold
   good_pp[good_pp<0.9]=0
   
   
@@ -81,7 +82,7 @@ for (y in 1:22){
   write.table(viterbi1,"fragment_call_all_chr.txt", col.names=FALSE ,row.names=FALSE, quote=F, sep = "\t", append = T)
   
   
-  viterbi1=viterbi1[,1:america[length(america)]]
+  viterbi1=viterbi1[,c(america,america_ref)]
   
   
   alleles=read.table(paste("chrom",y,"_rfmix.allelesRephased2_sep.txt",sep=""),sep="")
@@ -90,15 +91,15 @@ for (y in 1:22){
   snp_coding$both=paste(snp_coding$REF,snp_coding$ALT,sep = "")
   
   
-  for (ref_alt in 1:nrow(combinaciones)) {
+for (ref_alt in 1:nrow(combinaciones)) {
     
     coordenadas=which(snp_coding$both ==combinaciones[ref_alt,3], arr.ind = TRUE) 
     alleles[coordenadas,]=ifelse(alleles[coordenadas,]==0,as.character(combinaciones[ref_alt,1]),as.character(combinaciones[ref_alt,2]))
     
   }
   
-  alleles_ref=alleles[,america_ref]
-  alleles_america=alleles[,america]
+  #
+  alleles_america=alleles[,c(america,america_ref)]
   
   
   #now the masking, every position that is not a 3 on the viterbi file should be
@@ -112,17 +113,16 @@ for (y in 1:22){
   #Now it is MASKED!!! wiii
   
   # we now need to create 2 types of masking 
-  #1)diploid masking (only keeping calls that are coming from the american ancestry
+  #1)psuedo-haploid: duplication the haployd and creating the double of individuals 
+  #2)diploid masking (only keeping calls that are coming from the american ancestry
   #in both of the sides of the chromosome)
-  #2)psuedo-haploid: duplication the haployd and creating the double of individuals 
   
   
   
-  #######Pseudo-haploid: we need to give the same treatment to all the samples from the
-  #americas. even the non-admixed. 
   
+  #######Pseudo-haploid: 
   
-  pseudo=cbind(alleles_america, alleles_ref)
+  pseudo=alleles_america
   
   #here we duplicate
   pseudo1=pseudo[, rep(seq_len(ncol(pseudo)), each = 2)]
@@ -187,7 +187,7 @@ for (y in 1:22){
   # merge with the ref
   
   
-  diploid=cbind(alleles_america1, alleles_ref)
+  diploid=alleles_america1
   
   write.table(diploid, file=paste("masking/diploid_chr",y,".txt", sep = ""), row.names = F, col.names = F, quote = F)
   

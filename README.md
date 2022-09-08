@@ -95,7 +95,7 @@ for chr in {1..22}; do tabix -p vcf chrom${chr}_phased.vcf.gz ; done
 As we wanted to differentiate the American ancestry fragments from the African and European ones, we had to provide the software with three proxies for each population.The two reference panels for African and European admixture included the Yoruba and Spanish individuals. For the American panel, we selected “unadmixed” American individuals that were established with the following criteria: 
 
 ***1)*** not having African or European ancestry (according to K=8 Admixture and the run with the highest likelihood, 0.999 American ancestry)
-***2)*** being non-significant for the statistics f4(Unadmixed American Population, Target Individual, Han, San) for Unadmixed American Populations being Karitiana, Mixe, and Xavante, populations, usually chosen to represent unadmixed Native American populations (2, 3).
+***2)*** being non-significant for the statistics f4(Unadmixed American Population, Target Individual, Han, San) for Unadmixed American Populations being Karitiana, Mixe, and Xavante, populations, usually chosen to represent unadmixed Native American populations (7, 8).
 
 (!) The design of the reference panel is not provided on this script.
 
@@ -149,7 +149,7 @@ for chr in {1..22}; do vcftools --vcf  /phased_chr/chrom${chr}_phased_order.vcf 
 
 ### 2.3 Processing the output. MASKING
 
-RFMIX creates several output files, one of them contains the information of the posterior probability of the ancestry assignation for each SNP. The following script selects calls with a higher confidence than 0.9. In literature, I observed two masking methods, so I decided to evaluate which protocol was better (pseudo(3,4) or diploid masking(5)). In the diploid masking, for a SNP call to be kept, both sides of the chromosome should have been assigned with the same ancestry (in our case, Native American ancestry) (Fig. 3).While in the pseudo haploid methods, all calls assigned to the ancestry of interest are kept, as many software do not allow half-calls (a call on one chromosome and a missing call on the second one), the individuals will be pseudohaploid (Fig. 3.B).
+RFMIX creates several output files, one of them contains the information of the posterior probability of the ancestry assignation for each SNP. The following script selects calls with a higher confidence than 0.9. In literature, I observed two masking methods, so I decided to evaluate which protocol was better (pseudo(8,) or diploid masking(5)). In the diploid masking, for a SNP call to be kept, both sides of the chromosome should have been assigned with the same ancestry (in our case, Native American ancestry) (Fig. 3).While in the pseudo haploid methods, all calls assigned to the ancestry of interest are kept, as many software do not allow half-calls (a call on one chromosome and a missing call on the second one), the individuals will be pseudohaploid (Fig. 3.B).
 
 
 ![panel5 (dragged)](https://user-images.githubusercontent.com/60963543/189116108-c383b15e-19c4-4eba-8113-7a3a7d7c4eda.png)

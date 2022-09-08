@@ -1,3 +1,7 @@
 **PopGen with Epi**
 
-Here I left some of the scripts that I have been using during my PhD. 
+On this page you can find scripts that used for the publication .... They cover:
+
+- IBD (identity by descent)analysis
+- ALDER for dating admixture times
+- Masking ancestries in admixed populations

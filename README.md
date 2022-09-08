@@ -13,11 +13,11 @@ The position along PC1 and PC2 is proportional to the precentage of European anc
 
 By performing a local ancestry analysis (RFMIX in our case, for further details, refer to the method section), we estimated the origins of chromosomal segments in admixed individuals. The local ancestry software performs supervised analysis as we need to provide a set of reference populations with known ancestry to start the analysis. For local ancestry analysis, we need first to do the haplotyple estimation or phasing. I will start describing the analysis from a PLINK file where you should have the reference populations and the target populations. You should install the following softwares (I do everything thorugh conda):
 
-- PLINK
-- BCFTOOLS
-- BEAGLE
-- RFMIX v1.5.4
-- VCFTOOLS
+- PLINK (2)
+- BCFTOOLS (3)
+- BEAGLE (4)
+- RFMIX v1.5.4 (5)
+- VCFTOOLS (6)
 
 (!) I picked some codes from https://github.com/chiarabarbieri/SNPs_HumanOrigins_Recipes and did a few changes.
 
@@ -186,9 +186,19 @@ The performance of both methods is the same as both are based on the same local 
 
 ![image](https://user-images.githubusercontent.com/60963543/189123549-78030dc9-7d30-463d-be08-2fa139043e9b.png)
 
-***Figure 6:*** PCA with masked individuals with “only” Native American ancestry. A) masked American Samples with African and European references. B) masked American samples with European references. C) masked American Samples (Dataset 3.2).![image](https://user-images.githubusercontent.com/60963543/189123567-c35dae9e-cf78-4fe4-996e-8d33cb42f0d8.png)
+*** Figure 6: *** PCA with masked individuals with “only” Native American ancestry. A) masked American Samples with African and European references. B) masked American samples with European references. C) masked American Samples (Dataset 3.2).
 
 ***References***
+1. Alexander, D.H., Novembre, J., and Lange, K. (2009). Fast model-based estimation of ancestry in unrelated individuals. Genome Res 19, 1655–1664. 10.1101/gr.094052.109.
+
+2. Purcell, S., Neale, B., Todd-Brown, K., Thomas, L., Ferreira, M.A.R., Bender, D., Maller, J., Sklar, P., de Bakker, P.I.W., Daly, M.J., et al. (2007). PLINK: a tool set for whole-genome association and population-based linkage analyses. Am J Hum Genet 81, 559–575. 10.1086/519795.
+
+3. Li H. A statistical framework for SNP calling, mutation discovery, association mapping and population genetical parameter estimation from sequencing data. Bioinformatics (2011) 27(21) 2987-93.
+4. B L Browning, X Tian, Y Zhou, and S R Browning (2021) Fast two-stage phasing of large-scale sequence data. Am J Hum Genet 108(10):1880-1890. doi:10.1016/j.ajhg.2021.08.005
+5. Maples BK, Gravel S, Kenny EE, Bustamante CD. RFMix: a discriminative modeling approach for rapid and robust local-ancestry inference. Am J Hum Genet. 2013 Aug 8;93(2):278-88. doi: 10.1016/j.ajhg.2013.06.020. Epub 2013 Aug 1. PMID: 23910464; PMCID: PMC3738819.
+6. Petr Danecek, Adam Auton, Goncalo Abecasis, Cornelis A. Albers, Eric Banks, Mark A. DePristo, Robert Handsaker, Gerton Lunter, Gabor Marth, Stephen T. Sherry, Gilean McVean, Richard Durbin and 1000 Genomes Project Analysis Group.The Variant Call Format and VCFtools, Bioinformatics, 2011
+2. Reich, D. et al. Reconstructing Native American population history. Nature 488, 370–374 (2012).
+3. 
 
 
 

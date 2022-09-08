@@ -6,22 +6,12 @@ This script is designed to mask African and European ancestry from American samp
 
 ***Figure 1:*** PCA analysis.
 
-The postiion along PC1 and PC2 is proportional to the precentage of European ancestry calculated with ADMIXTURE (1)(Fig. 2).
+The position along PC1 and PC2 is proportional to the precentage of European ancestry calculated with ADMIXTURE (1)(Fig. 2).
 
 ![pc1_admix](https://user-images.githubusercontent.com/60963543/189091642-a870ad28-53b5-4143-848e-f99e866994af.png)
 ***Figure 2:*** Correlation between European ancestry at K=8 and position at PC1 and PC2
 
-By performing a local ancestry analysis (RFMIX in our case, for further details, refer to the method section), we estimated the origins of chromosomal segments in admixed individuals. The local ancestry software performs supervised analysis as we need to provide a set of reference populations with known ancestry to start the analysis. As we wanted to differentiate the American ancestry fragments from the African and European ones, we had to provide the software with three proxies for each population.The two reference panels for African and European admixture included the Yoruba and Spanish individuals. For the American panel, we selected “unadmixed” American individuals that were established with the following criteria: 
-
-***1)*** not having African or European ancestry (according to K=8 Admixture and the run with the highest likelihood, 0.999 American ancestry)
-***2)*** 2) being non-significant for the statistics f4(Unadmixed American Population, Target Individual, Han, San) for Unadmixed American Populations being Karitiana, Mixe, and Xavante, populations, usually chosen to represent unadmixed Native American populations (2, 3).
-
-
-
-
-In the original plink dataset you need to have a the admixed populations and the reference panels. For the American reference panel, we pick individuals that according to admixture have more than 0.999 American ancestry. The design of the reference panel is not provided on this script. 
-
-For local ancestry analysis, we need first to do the haplotyple estimation or phasing. I will start describing the analysis from a PLINK file where you should have the reference populations and the target populations. You should install these softwares. (I do everything thorugh conda):
+By performing a local ancestry analysis (RFMIX in our case, for further details, refer to the method section), we estimated the origins of chromosomal segments in admixed individuals. The local ancestry software performs supervised analysis as we need to provide a set of reference populations with known ancestry to start the analysis. For local ancestry analysis, we need first to do the haplotyple estimation or phasing. I will start describing the analysis from a PLINK file where you should have the reference populations and the target populations. You should install the following softwares (I do everything thorugh conda):
 
 - PLINK
 - BCFTOOLS
@@ -29,9 +19,7 @@ For local ancestry analysis, we need first to do the haplotyple estimation or ph
 - RFMIX v1.5.4
 - VCFTOOLS
 
-I picked some codes from https://github.com/chiarabarbieri/SNPs_HumanOrigins_Recipes and did a few changes.
-
-
+(!) I picked some codes from https://github.com/chiarabarbieri/SNPs_HumanOrigins_Recipes and did a few changes.
 
 ## 1. Phasing with BEAGLE
 ```
@@ -102,10 +90,18 @@ done
 for chr in {1..22}; do tabix -p vcf chrom${chr}_phased.vcf.gz ; done
 
 ```
+## 2. Local ancestry inference with RFMIX v1.5.4 
 
-## 2. Local ancestry inference with RFMIX
-I used the older version of RFMIX due to certain incosistency that I was seeing on the output on the v2. To run this script you need to have 2 files already prepared on your own with a simple script:
-#### - Order: a txt file with one column and the name of each individual per row in the desigened order. 1) Admixed samples need to go first 2) European individuals 3) African individuals 4) American samples without admixture as the reference panel of the Americas (My file is called order.txt)
+As we wanted to differentiate the American ancestry fragments from the African and European ones, we had to provide the software with three proxies for each population.The two reference panels for African and European admixture included the Yoruba and Spanish individuals. For the American panel, we selected “unadmixed” American individuals that were established with the following criteria: 
+
+***1)*** not having African or European ancestry (according to K=8 Admixture and the run with the highest likelihood, 0.999 American ancestry)
+***2)*** being non-significant for the statistics f4(Unadmixed American Population, Target Individual, Han, San) for Unadmixed American Populations being Karitiana, Mixe, and Xavante, populations, usually chosen to represent unadmixed Native American populations (2, 3).
+
+(!) The design of the reference panel is not provided on this script.
+
+To run this script you need to have 2 files already prepared on your own with a simple script:
+
+#### - Order: a txt file with one column and the name of each individual per row in the desigened order. 1) Admixed samples need to go first 2) European individuals 3) African individuals 4) American samples without admixture as the reference panel of the Americas (My file is called order.txt, so you can get an idea of how it should look)
 
 #### - Sample information: the same as the previous file but adding a second column where the admixed Americans will be coded as 0, Europeans as 1, Africans as 2 and the reference Americans as 3. Don't change the code, or the order, my script will not work.(sample_information.txt)
 

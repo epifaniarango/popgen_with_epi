@@ -1,14 +1,14 @@
 # Local ancestry analysis for masking
 
 This script is designed to mask African and European ancestry from American samples. It could be used for other populations with small adjutments. Our primary focus in this study is to understand the precolonial history of the Southern Cone and Mapuche populations. For this purpose, the African and European ancestries that came in colonial times represent a confounding effect. A possible solution to this issue is a process called masking. The masking process represents a methodological challenge; in the present note, we detail our steps and the different quality checks we performed. Before masking, we performed a PCA test including the admixed American individuals and European and African samples (Fig. 1). 
-![image](https://user-images.githubusercontent.com/60963543/189083972-d672b4c5-58e8-40a6-a4bf-edaf21ac6566.png)
 
+![image](https://user-images.githubusercontent.com/60963543/189083972-d672b4c5-58e8-40a6-a4bf-edaf21ac6566.png)
 Figure 1: PCA analysis.
 
 The postiion along PC1 and PC2 is proportional to the precentage of European ancestry calculated with ADMIXTURE (1)(Fig. 2).
 
-Figure 2: Correlation between European ancestry at K=8 and position at PC1 and PC2![image](https://user-images.githubusercontent.com/60963543/189083944-1110f9a5-6d99-4716-b39c-e62e25bfaa75.png)
-
+![image](https://user-images.githubusercontent.com/60963543/189084192-e835d7e3-bd1e-4849-81cf-675fc1627ee1.png)
+Figure 2: Correlation between European ancestry at K=8 and position at PC1 and PC2
 
 In the original plink dataset you need to have a the admixed populations and the reference panels. For the American reference panel, we pick individuals that according to admixture have more than 0.999 American ancestry. The design of the reference panel is not provided on this script. 
 

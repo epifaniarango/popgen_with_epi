@@ -11,6 +11,14 @@ The postiion along PC1 and PC2 is proportional to the precentage of European anc
 ![pc1_admix](https://user-images.githubusercontent.com/60963543/189091642-a870ad28-53b5-4143-848e-f99e866994af.png)
 ***Figure 2:*** Correlation between European ancestry at K=8 and position at PC1 and PC2
 
+By performing a local ancestry analysis (RFMIX in our case, for further details, refer to the method section), we estimated the origins of chromosomal segments in admixed individuals. The local ancestry software performs supervised analysis as we need to provide a set of reference populations with known ancestry to start the analysis. As we wanted to differentiate the American ancestry fragments from the African and European ones, we had to provide the software with three proxies for each population.The two reference panels for African and European admixture included the Yoruba and Spanish individuals. For the American panel, we selected “unadmixed” American individuals that were established with the following criteria: 
+
+***1)*** not having African or European ancestry (according to K=8 Admixture and the run with the highest likelihood, 0.999 American ancestry)
+***2)*** 2) being non-significant for the statistics f4(Unadmixed American Population, Target Individual, Han, San) for Unadmixed American Populations being Karitiana, Mixe, and Xavante, populations, usually chosen to represent unadmixed Native American populations (2, 3).
+
+
+
+
 In the original plink dataset you need to have a the admixed populations and the reference panels. For the American reference panel, we pick individuals that according to admixture have more than 0.999 American ancestry. The design of the reference panel is not provided on this script. 
 
 For local ancestry analysis, we need first to do the haplotyple estimation or phasing. I will start describing the analysis from a PLINK file where you should have the reference populations and the target populations. You should install these softwares. (I do everything thorugh conda):

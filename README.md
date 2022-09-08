@@ -174,11 +174,18 @@ The plink file pseudo_haploid contains both the masked individuals and the indiv
 
 Thank you Jonas for your help with this script =)
 
-## 2. Comparing performance of both methods
+## 3. Comparing performance of both methods
 After following both masking protocols, we compared the performance by calculating the percentage of missing data per individual (Fig. 4), and the same f4-statistics mentioned above to compare the performance (Fig. 5).
 ![Rplot09](https://user-images.githubusercontent.com/60963543/189121417-7c79fd67-3b62-49d6-ac6e-2b213447621a.png)
 ***Figure 4:*** Percentage of missing data per individual after applying A) diploid and B) pseudohaploid masking.
 
 ![f4_comparison](https://user-images.githubusercontent.com/60963543/189122958-8a3df657-c833-498a-8c74-9af7414364f0.png)
 ***Figure 5:*** Performance of masking methods A) diploid and B) pseudohaploid masking, measured through the statistic f4(Unadmixed American Population, Target Individual, Han, San) being Unadmixed American Populations being Karitiana, Mixe, and Xavante. 
-***Figure 5:*** Performance of masking methods A) diploid and B) pseudohaploid masking, measured through the statistic f4(Unadmixed American Population, Target Individual, Han, San) being Unadmixed American Populations being Karitiana, Mixe, and Xavante. ![image](https://user-images.githubusercontent.com/60963543/189122786-ed3624cf-bd68-40c5-a734-32b4e3cfea2f.png)
+
+The performance of both methods is the same as both are based on the same local ancestry run (Fig. 5), but pseudo haploid masking keeps a higher number of SNPs (Fig. 4). We decided to only used the pseudohaploid masking for all the downstream analysis. We also confirmed the performance wih different PCA visualizations (Fig. 6).
+
+![image](https://user-images.githubusercontent.com/60963543/189123549-78030dc9-7d30-463d-be08-2fa139043e9b.png)
+***Figure 6:*** PCA with masked individuals with “only” Native American ancestry. A) masked American Samples with African and European references. B) masked American samples with European references. C) masked American Samples (Dataset 3.2).![image](https://user-images.githubusercontent.com/60963543/189123567-c35dae9e-cf78-4fe4-996e-8d33cb42f0d8.png)
+
+
+

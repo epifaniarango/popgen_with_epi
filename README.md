@@ -4,7 +4,7 @@ This script is designed to mask African and European ancestry from American samp
 
 ![PCA_continents_noAncient](https://user-images.githubusercontent.com/60963543/189084917-5a7cd5d4-d73f-4c17-8eb7-06513acfc91e.png)
 
-###Figure 1: PCA analysis.
+### Figure 1: PCA analysis.
 
 The postiion along PC1 and PC2 is proportional to the precentage of European ancestry calculated with ADMIXTURE (1)(Fig. 2).
 

@@ -4,12 +4,12 @@ This script is designed to mask African and European ancestry from American samp
 
 ![PCA_continents_noAncient](https://user-images.githubusercontent.com/60963543/189084917-5a7cd5d4-d73f-4c17-8eb7-06513acfc91e.png)
 
-### Figure 1: PCA analysis.
+***Figure 1:*** PCA analysis.
 
 The postiion along PC1 and PC2 is proportional to the precentage of European ancestry calculated with ADMIXTURE (1)(Fig. 2).
 
-
-Figure 2: Correlation between European ancestry at K=8 and position at PC1 and PC2
+![pc1_admix](https://user-images.githubusercontent.com/60963543/189091642-a870ad28-53b5-4143-848e-f99e866994af.png)
+***Figure 2:**** Correlation between European ancestry at K=8 and position at PC1 and PC2
 
 In the original plink dataset you need to have a the admixed populations and the reference panels. For the American reference panel, we pick individuals that according to admixture have more than 0.999 American ancestry. The design of the reference panel is not provided on this script. 
 

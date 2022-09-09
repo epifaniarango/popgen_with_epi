@@ -189,7 +189,7 @@ The performance of both methods is the same as both are based on the same local 
 
 ![image](https://user-images.githubusercontent.com/60963543/189123549-78030dc9-7d30-463d-be08-2fa139043e9b.png)
 
-*** Figure 6: *** PCA with masked individuals with “only” Native American ancestry. A) masked American Samples with African and European references. B) masked American samples with European references. C) masked American Samples (Dataset 3.2).
+***Figure 6:*** PCA with masked individuals with “only” Native American ancestry. A) masked American Samples with African and European references. B) masked American samples with European references. C) masked American Samples (Dataset 3.2).
 
 ***References***
 1. Alexander, D.H., Novembre, J., and Lange, K. (2009). Fast model-based estimation of ancestry in unrelated individuals. Genome Res 19, 1655–1664. 10.1101/gr.094052.109.

@@ -187,9 +187,10 @@ After following both masking protocols, we compared the performance by calculati
 
 The performance of both methods is the same as both are based on the same local ancestry run (Fig. 5), but pseudo haploid masking keeps a higher number of SNPs (Fig. 4). We decided to only used the pseudohaploid masking for all the downstream analysis. We also confirmed the performance wih different PCA visualizations (Fig. 6).
 
-![image](https://user-images.githubusercontent.com/60963543/189123549-78030dc9-7d30-463d-be08-2fa139043e9b.png)
-
+![pca_plots](https://user-images.githubusercontent.com/60963543/189308775-164c7121-e466-4cd6-9ccc-6bc3f341c6e9.png)
 ***Figure 6:*** PCA with masked individuals with “only” Native American ancestry. A) masked American Samples with African and European references. B) masked American samples with European references. C) masked American Samples (Dataset 3.2).
+
+The masking performs well, and we could use the masked samples for several downstream analyses as sensible as D-statistics. I hope it was helpful; email me if you need some help (epifaniarango@gmail.com).
 
 ***References***
 1. Alexander, D.H., Novembre, J., and Lange, K. (2009). Fast model-based estimation of ancestry in unrelated individuals. Genome Res 19, 1655–1664. 10.1101/gr.094052.109.

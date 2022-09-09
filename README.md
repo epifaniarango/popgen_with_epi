@@ -1,17 +1,18 @@
 # Local ancestry analysis for masking
 
-This script is designed to mask African and European ancestry from American samples. It could be used for other populations with small adjutments. Our primary focus in this study is to understand the precolonial history of the Southern Cone and Mapuche populations. For this purpose, the African and European ancestries that came in colonial times represent a confounding effect. A possible solution to this issue is a process called masking. The masking process represents a methodological challenge; in the present note, we detail our steps and the different quality checks we performed. Before masking, we performed a PCA test including the admixed American individuals and European and African samples (Fig. 1). 
+This script is designed to mask African and European ancestry from American samples and could be used for other populations with minor adjustments. Our primary focus in this study is to understand the precolonial history of the Southern Cone and Mapuche populations. For this purpose, the African and European ancestries that came in colonial times represent a confounding effect. A possible solution to this issue is a process called masking. The masking process represents a methodological challenge; in the present note, we detail our steps and the different quality checks we performed. Before masking, we performed a PCA test including the admixed American individuals and European and African samples (Fig. 1). On the PC1, we observed a gradient of the American individuals towards the African and mainly towards European individuals (Fig. 1). 
+
 
 ![PCA_continents_noAncient](https://user-images.githubusercontent.com/60963543/189084917-5a7cd5d4-d73f-4c17-8eb7-06513acfc91e.png)
 
 ***Figure 1:*** PCA analysis.
 
-The position along PC1 and PC2 is proportional to the precentage of European ancestry calculated with ADMIXTURE (1)(Fig. 2).
+We confirmed it by directly comparing the percentage of European ancestry calculated with ADMIXTURE (1) and the position along PC1 and PC2 (Fig. 2). 
 
 ![pc1_admix](https://user-images.githubusercontent.com/60963543/189091642-a870ad28-53b5-4143-848e-f99e866994af.png)
 ***Figure 2:*** Correlation between European ancestry at K=8 and position at PC1 and PC2
 
-By performing a local ancestry analysis (RFMIX in our case, for further details, refer to the method section), we estimated the origins of chromosomal segments in admixed individuals. The local ancestry software performs supervised analysis as we need to provide a set of reference populations with known ancestry to start the analysis. For local ancestry analysis, we need first to do the haplotyple estimation or phasing. I will start describing the analysis from a PLINK file where you should have the reference populations and the target populations. You should install the following softwares (I do everything thorugh conda):
+By performing a local ancestry analysis (RFMIX in our case, for further details, refer to the method section), we estimated the origins of chromosomal segments in admixed individuals. The local ancestry software performs supervised analysis as we need to provide a set of reference populations with known ancestry to start the analysis. For local ancestry analysis, we need first to do the haplotype estimation or phasing. I will begin describing the analysis from a PLINK file where you should have the reference and target populations. You should install the following software (I do everything through Conda):
 
 - PLINK (2)
 - BCFTOOLS (3)
@@ -19,7 +20,7 @@ By performing a local ancestry analysis (RFMIX in our case, for further details,
 - RFMIX v1.5.4 (5)
 - VCFTOOLS (6)
 
-(!) I picked some codes from https://github.com/chiarabarbieri/SNPs_HumanOrigins_Recipes and did a few changes.
+(!) I picked some codes from https://github.com/chiarabarbieri/SNPs_HumanOrigins_Recipes and made a few changes.
 
 ## 1. Phasing with BEAGLE
 ```
@@ -92,7 +93,7 @@ for chr in {1..22}; do tabix -p vcf chrom${chr}_phased.vcf.gz ; done
 ```
 ## 2. Local ancestry inference with RFMIX v1.5.4 
 
-As we wanted to differentiate the American ancestry fragments from the African and European ones, we had to provide the software with three proxies for each population.The two reference panels for African and European admixture included the Yoruba and Spanish individuals. For the American panel, we selected “unadmixed” American individuals that were established with the following criteria: 
+As we wanted to differentiate the American ancestry fragments from the African and European ones, we had to provide the software with three proxies for each population. The two reference panels for African and European admixture included the Yoruba and Spanish individuals. For the American panel, we selected "unadmixed" American individuals that were established with the following criteria: 
 
 ***1)*** not having African or European ancestry (according to K=8 Admixture and the run with the highest likelihood, 0.999 American ancestry)
 ***2)*** being non-significant for the statistics f4(Unadmixed American Population, Target Individual, Han, San) for Unadmixed American Populations being Karitiana, Mixe, and Xavante, populations, usually chosen to represent unadmixed Native American populations (7, 8).
@@ -101,18 +102,18 @@ As we wanted to differentiate the American ancestry fragments from the African a
 
 To run this script you need to have 2 files already prepared on your own with a simple script:
 
-#### - Order: a txt file with one column and the name of each individual per row in the desigened order. 1) Admixed samples need to go first 2) European individuals 3) African individuals 4) American samples without admixture as the reference panel of the Americas (My file is called order.txt, so you can get an idea of how it should look)
+#### - Order: a txt file with one column and the name of each individual per row in the designed order. 1) Admixed samples need to go first 2) European individuals 3) African individuals 4) American samples without admixture as the reference panel of the Americas (My file is called order.txt, so you can get an idea of how it should look)
 
-#### - Sample information: the same as the previous file but adding a second column where the admixed Americans will be coded as 0, Europeans as 1, Africans as 2 and the reference Americans as 3. Don't change the code, or the order, my script will not work.(sample_information.txt)
+#### - Sample information: the same as the previous file but adding a second column where the admixed Americans will be coded as 0, Europeans as 1, Africans as 2 and the reference Americans as 3. Please don't change the code or the order; my script will not work. (sample_information.txt)
 
 ### 2.1 Prepare input files
-The plink samples order follow usually an alphabethical order. We need to change this and follow the order that we already pre-defined. After this we need to change vcf format to the RFMIX format (alleles).
+The plink sample order is usually alphabetical. We need to change this and follow the order that we already pre-defined. After this, we need to change vcf format to the RFMIX format (alleles).
 ```
 for chr in {1..22}; do bcftools view -S order.txt /phased_chr/chrom${chr}_phased.vcf.gz >  phased_chr/chrom${chr}_phased_order.vcf ; done
 for chr in {1..22}; do cat chrom${chr}_phased_order.vcf  | grep -v '#' | cut -f10- | tr -d  '\t|' > chrom${chr}.alleles ; done
 
 ```
-A class file is also need. It is just basically a file where you tell RFMIX to which group that individual belongs (target, ref1, ref2, ...). We will create that file based on the second file I asked you to create. RFMIX asks you to create a code of each HAPLOTYPE, not invidiual. Rcode:
+A class file is also needed, where you tell RFMIX to which group that individual belongs (target, ref1, ref2, ...). We will create that file based on the second file I asked you to create. RFMIX asks you to create a code of each HAPLOTYPE, not individual. Rcode:
 
 ```
 all=read.table("sample_information.txt")
@@ -120,7 +121,7 @@ all=all[rep(seq_len(nrow(all)), each = 2), ]
 write.table(t(all$V2),"sample_file.txt",col.names = F, row.names = F, quote = F, sep = "\t")
 ```
 
-We will need this at some point during the downstream analysis. I am not keeeping track on which folder I am (at least not always, be carefull).
+We will need this at some point during the downstream analysis. I am not keeping track of which folder I am in (at least not consistently; be careful).
 ```
 for i in `seq 22`; do
 
@@ -129,7 +130,8 @@ done
 ```
 
 ### 2.2 Running the program
-I ran it on our server, it took around 24h per chr with 10 cores. If you change some of the options, it would take less. Everything that you need to know to get the programm in your computer is here (https://github.com/indraniel/rfmix). You need to run it from the folder where the programme is. 
+I ran it on our server, which took around 24h per chromosome with 10 cores. If you change some of the options, it will take less. Everything you need to know to get the program on your computer is here (https://github.com/indraniel/rfmix). You need to run it from the folder where the programme is. 
+
 
 ```
 cd /your_path/RFMix_v1.5.4 
@@ -149,13 +151,14 @@ for chr in {1..22}; do vcftools --vcf  /phased_chr/chrom${chr}_phased_order.vcf 
 
 ### 2.3 Processing the output. MASKING
 
-RFMIX creates several output files, one of them contains the information of the posterior probability of the ancestry assignation for each SNP. The following script selects calls with a higher confidence than 0.9. In literature, I observed two masking methods, so I decided to evaluate which protocol was better (pseudo(8,) or diploid masking(5)). In the diploid masking, for a SNP call to be kept, both sides of the chromosome should have been assigned with the same ancestry (in our case, Native American ancestry) (Fig. 3).While in the pseudo haploid methods, all calls assigned to the ancestry of interest are kept, as many software do not allow half-calls (a call on one chromosome and a missing call on the second one), the individuals will be pseudohaploid (Fig. 3.B).
+RFMIX creates several output files; one of them contains information on the posterior probability of the ancestry assignation for each SNP. The following script selects calls with higher confidence than 0.9. In the literature, I observed two masking methods, so I decided to evaluate which protocol was better (pseudo(8,9) or diploid masking(10)). In the diploid masking, for a SNP call to be kept, both sides of the chromosome should have been assigned with the same ancestry (in our case, Native American ancestry) (Fig. 3.A). While in the pseudo haploid methods, all calls assigned to the ancestry of interest are kept, as many software do not allow half-calls (a call on one chromosome and a missing call on the second one), the individuals will be pseudohaploidized (Fig. 3.B).
 
 
 ![panel5 (dragged)](https://user-images.githubusercontent.com/60963543/189116108-c383b15e-19c4-4eba-8113-7a3a7d7c4eda.png)
 ***Figure 3:*** Visual representation of masking methods. A) diploid and B) pseudohaploid masking of one individual.
 
-The code will not work if the names of the files are different. I created the script under R v4.0.3, be aware that things might not work with other version. You can use a conda environment to select the desired version. The script is above. I create here 2 types of masking: diploid and pseudohaploid.
+The code will not work if the names of the files are different. I created the script under R v4.0.3, be aware that things might not work with other versions. You can use a conda environment to select the desired version. The script is above. I create here 2 types of masking: diploid and pseudohaploid.
+
 ```
 mkdir masking
 
@@ -170,12 +173,12 @@ for chr in {1..22}; do plink --file pseudo_haploid_chr${chr}  --allow-no-sex --m
 plink --allow-no-sex --bfile pseudo_haploid_chr1 --merge-list list.txt --make-bed --out pseudo_haploid
 ```
 
-The plink file pseudo_haploid contains both the masked individuals and the individuals used as a the American reference panel, in these case.
+The plink file pseudo_haploid contains both the masked individuals and the individuals used as the American reference panel in these case.
 
-Thank you Jonas for your help with this script =)
+Thank you Jonas, for your help with this script =)
 
 ## 3. Comparing performance of both methods
-After following both masking protocols, we compared the performance by calculating the percentage of missing data per individual (Fig. 4), and the same f4-statistics mentioned above to compare the performance (Fig. 5).
+After following both masking protocols, we compared the performance by calculating the percentage of missing data per individual (Fig. 4) and the same f4-statistics mentioned above to compare the performance of the masking (Fig. 5).
 ![Rplot09](https://user-images.githubusercontent.com/60963543/189121417-7c79fd67-3b62-49d6-ac6e-2b213447621a.png)
 ***Figure 4:*** Percentage of missing data per individual after applying A) diploid and B) pseudohaploid masking.
 
@@ -198,8 +201,12 @@ The performance of both methods is the same as both are based on the same local 
 
 5. Maples, B.K., Gravel, S., Kenny, E.E., and Bustamante, C.D. (2013). RFMix: A Discriminative Modeling Approach for Rapid and Robust Local-Ancestry Inference. Am J Hum Genet 93, 278–288. 10.1016/j.ajhg.2013.06.020.
 6. Danecek, P., Auton, A., Abecasis, G., Albers, C.A., Banks, E., DePristo, M., Handsaker, R., Lunter, G., Marth, G., Sherry, S.T., et al. (2011). The Variant Call Format and VCFtools. Bioinformatics.
-7. 1. Reich, D., Patterson, N., Campbell, D., Tandon, A., Mazieres, S., Ray, N., Parra, M.V., Rojas, W., Duque, C., Mesa, N., et al. (2012). Reconstructing Native American population history. Nature 488, 370–374. 10.1038/nature11258.
+7. Reich, D., Patterson, N., Campbell, D., Tandon, A., Mazieres, S., Ray, N., Parra, M.V., Rojas, W., Duque, C., Mesa, N., et al. (2012). Reconstructing Native American population history. Nature 488, 370–374. 10.1038/nature11258.
 8. Capodiferro, M.R., Aram, B., Raveane, A., Rambaldi Migliore, N., Colombo, G., Ongaro, L., Rivera, J., Mendizábal, T., Hernández-Mora, I., Tribaldos, M., et al. (2021). Archaeogenomic distinctiveness of the Isthmo-Colombian area. Cell. 10.1016/j.cell.2021.02.040.
+9. Ioannidis, A.G., Blanco-Portillo, J., Sandoval, K., Hagelberg, E., Miquel-Poblete, J.F., Moreno-Mayar, J.V., Rodríguez-Rodríguez, J.E., Quinto-Cortés, C.D., Auckland, K., Parks, T., et al. (2020). Native American gene flow into Polynesia predating Easter Island settlement. Nature 583, 572–577. 10.1038/s41586-020-2487-2.
+10. Luisi, P., García, A., Berros, J.M., Motti, J.M.B., Demarchi, D.A., Alfaro, E., Aquilano, E., Argüelles, C., Avena, S., Bailliet, G., et al. (2020). Fine-scale genomic analyses of admixed individuals reveal unrecognized genetic ancestry components in Argentina. PLOS ONE 15, e0233808. 10.1371/journal.pone.0233808.
+
+
 
 
 

@@ -13,10 +13,7 @@ the combinations that include one of our newly sequenced Southern Chile populati
 ## F4-statistics
 
 ![question1](https://user-images.githubusercontent.com/60963543/209358147-a6b2cf4a-a297-4c49-896c-d03f05dcf2be.jpeg)
-
-[question1.pdf](https://github.com/epifaniarango/popgen_with_epi/blob/Dstats-plots/question1.pdf)
-<embed src="http://example.com/the.pdf" width="500" height="375" 
- type="application/pdf">
+[embed][http://example.com/file.pdf](https://github.com/epifaniarango/popgen_with_epi/blob/Dstats-plots/question1.pdf)[/embed]
 
 ***References***
 1. Patterson, N., Moorjani, P., Luo, Y., Mallick, S., Rohland, N., Zhan, Y., Genschoreck, T., Webster, T., and Reich, D. (2012). Ancient Admixture in Human History. Genetics 192, 1065–1093. 10.1534/genetics.112.145037.

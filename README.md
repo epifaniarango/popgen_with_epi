@@ -11,7 +11,7 @@ the combinations that include one of our newly sequenced Southern Chile populati
 ***Figure 1:*** Outgroup f3-statistics of the form f3(Mbuti, X, Y) being X: A) Lafkenche B) Pehuenche C) Huilliche-Chiloe and Y all the available populations or ancient samples from Dataset 3.3. Populations on the Y axes are ordered based on an decreasing value of the f3 results. 
 
 ## F4-statistics
-
+<image src="https://github.com/epifaniarango/popgen_with_epi/blob/Dstats-plots/question1.pdf"/>
 ![question1](https://user-images.githubusercontent.com/60963543/209358147-a6b2cf4a-a297-4c49-896c-d03f05dcf2be.jpeg)
 [embed][http://example.com/file.pdf](https://github.com/epifaniarango/popgen_with_epi/blob/Dstats-plots/question1.pdf)[/embed]
 

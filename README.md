@@ -12,6 +12,10 @@ the combinations that include one of our newly sequenced Southern Chile populati
 
 ## F4-statistics
 
+![question1](https://user-images.githubusercontent.com/60963543/209358147-a6b2cf4a-a297-4c49-896c-d03f05dcf2be.jpeg)
+
+[question1.pdf](https://github.com/epifaniarango/popgen_with_epi/files/10295866/question1.pdf)
+
 
 
 ***References***

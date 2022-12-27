@@ -21,10 +21,14 @@ We further explored the relationship between Mapuche and Conchalí with an f4 in
 ![figure3](https://user-images.githubusercontent.com/60963543/209677886-ac54967c-1079-4409-abf2-7320f2600785.jpeg)
 ***Figure 3:*** 
 
-![figure4_git](https://user-images.githubusercontent.com/60963543/209687174-cab25058-c49b-4725-a052-386b047694b1.jpeg)
 
+
+![figure4_git](https://user-images.githubusercontent.com/60963543/209687540-186b9604-6f28-452f-ac24-b9ed0c8dbace.jpeg)
 ***Figure 4:*** 
 
+
+![figure5](https://user-images.githubusercontent.com/60963543/209690015-a3f888fa-2d46-4d4f-8637-fb14faa1cdef.jpeg)
+***Figure 5:*** 
 
 ***References***
 1. Patterson, N., Moorjani, P., Luo, Y., Mallick, S., Rohland, N., Zhan, Y., Genschoreck, T., Webster, T., and Reich, D. (2012). Ancient Admixture in Human History. Genetics 192, 1065–1093. 10.1534/genetics.112.145037.

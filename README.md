@@ -11,9 +11,9 @@ the combinations that include one of our newly sequenced Southern Chile populati
 ***Figure 1:*** Outgroup f3-statistics of the form f3(Mbuti, X, Y) being X: A) Lafkenche B) Pehuenche C) Huilliche-Chiloe and Y all the available populations or ancient samples from Dataset 3.3. Populations on the Y axes are ordered based on an decreasing value of the f3 results. 
 
 ## F4-statistics
-<image src="https://github.com/epifaniarango/popgen_with_epi/blob/Dstats-plots/question1.pdf"/>
-![question1](https://user-images.githubusercontent.com/60963543/209358147-a6b2cf4a-a297-4c49-896c-d03f05dcf2be.jpeg)
-[embed][http://example.com/file.pdf](https://github.com/epifaniarango/popgen_with_epi/blob/Dstats-plots/question1.pdf)[/embed]
+![figure2](https://user-images.githubusercontent.com/60963543/209647696-dad8a61a-8ac2-44f3-81f3-9ad5bac6ccfe.jpg)
+***Figure 2:*** :  f4-statistics to check the genetic continuity between modern Mapuche groups against significant allele sharing with other ancient and modern populations. A) f4(Mbuti, X; Lafkenche, Pehuenche) B) f4(Mbuti, X; Lafkenche, Chiloe). C) f4(Mbuti, X; Pehuenche, Chiloe). The statistics were calculated using all the available SNPs (blue) and only transversions (red). On the X axes, we observe the Zscore, and the vertical lines represent |Z|= 3.3 and 3. 
+
 
 ***References***
 1. Patterson, N., Moorjani, P., Luo, Y., Mallick, S., Rohland, N., Zhan, Y., Genschoreck, T., Webster, T., and Reich, D. (2012). Ancient Admixture in Human History. Genetics 192, 1065–1093. 10.1534/genetics.112.145037.

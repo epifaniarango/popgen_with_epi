@@ -40,7 +40,7 @@ We also try the same approach to assess if this migration occurred in other area
 ***Figure 7:*** f4-statistics deniying a strong signal of gene flow between contemporary Mapuche and Late Holocene Central Chile (Conchalí) populations with the Andes. The statistics were calculated using all the available SNPs (blue) and only transversions (red). A) Peru_Cuncaicha_9000BP, B)Peru_Lauricocha_8600BP, C)Peru_Cuncaicha_4200BP, D)Peru_LaGalgada_4100BP, and E)Peru_Lauricocha_3500BP. On the X axes, we observe the Zscore and the vertical lines represent |Z|= 3.3 and 3, and on the Y axes, samples are ordered based on a decreasing Zscore. Only statistics with more than 30,000 SNPs are represented.
 
 
-By testing the configuration f4(Mbuti, X; Central/Southern Chile, Argentina/Far South), where X is any ancient or modern sample not from the Southern Cone, we find consistent symmetry in relationships to populations outside the Southern Cone, except for the Middle Holocene ArroyoSeco2_7700BP and LagunaChica_6800BP (Supplementary Table).
+By testing the configuration f4(Mbuti, X; Central/Southern Chile, Argentina/Far South), where X is any ancient or modern sample not from the Southern Cone, we find consistent symmetry in relationships to populations outside the Southern Cone, except certain combinations with middle Holocene Argentina (ArroyoSeco2_7700BP and LagunaChica_6800BP) only a small percentage of the combinations (Table 1). To further explore the raw statistics go to the  Supplementary Table.
 
 
 ***Table1:*** Proportion of significant and non-significant f4-statistics of the form f4(Mbuti, X; Central/Southern Chile, Argentina/Far South)

@@ -42,11 +42,14 @@ We also try the same approach to assess if this migration occurred in other area
 
 By testing the configuration f4(Mbuti, X; Central/Southern Chile, Argentina/Far South), where X is any ancient or modern sample not from the Southern Cone, we find consistent symmetry in relationships to populations outside the Southern Cone, except for the Middle Holocene ArroyoSeco2_7700BP and LagunaChica_6800BP (Supplementary Table).
 
-| F4-statistics   | Number        | 
-| --------------- |:-------------:| 
-| Significant     | 297           | 
-| Non-Significant | 16860         | 
-| Total           | 17157         | 
+
+***Table1:*** Proportion of significant and non-significant f4-statistics of the form f4(Mbuti, X; Central/Southern Chile, Argentina/Far South)
+
+| F4-statistics   | Number        | Proportion    |
+| --------------- |:-------------:|:-------------:| 
+| Significant     | 297           |  1.73         | 
+| Non-Significant | 16860         |  98.27        | 
+| Total           | 17157         |  100          |
 
 
 

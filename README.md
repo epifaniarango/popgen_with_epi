@@ -39,6 +39,17 @@ We also try the same approach to assess if this migration occurred in other area
 ![figure7](https://user-images.githubusercontent.com/60963543/209785023-3018ad3d-fab5-4849-9d17-7ed2d286088d.jpeg)
 ***Figure 7:*** f4-statistics deniying a strong signal of gene flow between contemporary Mapuche and Late Holocene Central Chile (Conchalí) populations with the Andes. The statistics were calculated using all the available SNPs (blue) and only transversions (red). A) Peru_Cuncaicha_9000BP, B)Peru_Lauricocha_8600BP, C)Peru_Cuncaicha_4200BP, D)Peru_LaGalgada_4100BP, and E)Peru_Lauricocha_3500BP. On the X axes, we observe the Zscore and the vertical lines represent |Z|= 3.3 and 3, and on the Y axes, samples are ordered based on a decreasing Zscore. Only statistics with more than 30,000 SNPs are represented.
 
+
+By testing the configuration f4(Mbuti, X; Central/Southern Chile, Argentina/Far South), where X is any ancient or modern sample not from the Southern Cone, we find consistent symmetry in relationships to populations outside the Southern Cone, except for the Middle Holocene ArroyoSeco2_7700BP and LagunaChica_6800BP (Supplementary Table).
+
+| F4-statistics   | Number        | 
+| --------------- |:-------------:| 
+| Significant     | 297           | 
+| Non-Significant | 16860         | 
+| Total           | 17157         | 
+
+
+
 ***References***
 1. Patterson, N., Moorjani, P., Luo, Y., Mallick, S., Rohland, N., Zhan, Y., Genschoreck, T., Webster, T., and Reich, D. (2012). Ancient Admixture in Human History. Genetics 192, 1065–1093. 10.1534/genetics.112.145037.
 2. Posth, C., Nakatsuka, N., Lazaridis, I., Skoglund, P., Mallick, S., Lamnidis, T.C., Rohland, N., Nägele, K., Adamski, N., Bertolini, E., et al. (2018). Reconstructing the Deep Population History of Central and South America. Cell 175, 1185-1197.e22. 10.1016/j.cell.2018.10.027.

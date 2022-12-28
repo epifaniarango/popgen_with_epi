@@ -19,23 +19,25 @@ In our first overview, we explored allele sharing between Mapuche groups with th
 We further explored the relationship between Mapuche and Conchalí with an f4 in the following format: f4(Mbuti, Lafkenche/Pehuenche/Huilliche-Chiloe; Conchalí, Ancient sample / Modern sample) and  f4(Mbuti, Ancient sample / Modern samples; Conchalí, Lafkenche/Pehuenche/HuillicheChiloe;) (Figure 3). The affinity of modern Mapuche populations to Conchalí is higher than any other contemporary group and almost with all the available ancient samples (Figure 3.A-B). We also found some striking relationships between Conchalí_700BP and with Brazil_LapaDoSanto_9,600BP (Figure 3.B) and with a few Far South individuals (Aonikenk_400BP and Selknam_400BP).
 
 ![figure3](https://user-images.githubusercontent.com/60963543/209677886-ac54967c-1079-4409-abf2-7320f2600785.jpeg)
-***Figure 3:*** 
+***Figure 3:*** f4-statistics to check the preferential affinity of modern Mapuche groups with Conchalí_700BP. The statistics were calculated using all the available SNPs (blue) and only transversions (red). Ancient samples in positions A) Z, and B) X, and modern populations in positions C)Z and D) X. We observe the Zscore and the vertical lines represent |Z|= 3.3 and 3, and on the Y axes, samples are ordered based on an increasing Zscore.
+
 
 
 
 ![figure4_git](https://user-images.githubusercontent.com/60963543/209687540-186b9604-6f28-452f-ac24-b9ed0c8dbace.jpeg)
-***Figure 4:*** 
+***Figure 4:*** f4-statistics to check affinity of ancient Central Chile samples with modern Southern Chile (SC).  The statistics were calculated using all the available SNPs (blue) and only transversions (red). A) Z= Conchali_700BP. B) Z= LosRieles_5100BP. C) Z= LosRieles_1200BP. On the X axes, we observe the Zscore and the vertical lines represent |Z|= 3.3 and 3, and on the Y axes, samples are ordered based on an increasing Zscore.
+
 
 
 ![figure5](https://user-images.githubusercontent.com/60963543/209690015-a3f888fa-2d46-4d4f-8637-fb14faa1cdef.jpeg)
-***Figure 5:*** 
+***Figure 5:***  f4-statistics confirm gene flow between contemporary Mapuche and Late Holocene Central Chile (Conchalí) populations with Late Holocene Far South. The statistics were calculated using all the available SNPs (blue) and only transversions (red). A) FS_LaArcillosa2_5800BP, B) FS_PuntaSantaAna_7300BP and C) FS_Ayayema_4700BP. On the X axes, we observe the Zscore and the vertical lines represent |Z|= 3.3 and 3, and on the Y axes, samples are ordered based on a decreasing Zscore. Only statistics with more than 30,000 SNPs are represented. 
 
 
 ![figure6](https://user-images.githubusercontent.com/60963543/209691911-9066976a-5622-4a09-8b4c-92854dd6b8bf.jpeg)
-***Figure 6:*** 
+***Figure 6:*** f4-statistics deniying a strong signal of gene flow between contemporary Mapuche and Late Holocene Central Chile (Conchalí) populations with ancient Argentina. The statistics were calculated using all the available SNPs (blue) and only transversions (red). A) Argentina_ArroyoSeco2_7700BP and B)Argentina_LagunaChica_6800BP. On the X axes, we observe the Zscore and the vertical lines represent |Z|= 3.3 and 3, and on the Y axes, samples are ordered based on a decreasing Zscore. Only statistics with more than 30,000 SNPs are represented.
 
 ![figure7](https://user-images.githubusercontent.com/60963543/209785023-3018ad3d-fab5-4849-9d17-7ed2d286088d.jpeg)
-***Figure 7:*** 
+***Figure 7:*** f4-statistics deniying a strong signal of gene flow between contemporary Mapuche and Late Holocene Central Chile (Conchalí) populations with the Andes. The statistics were calculated using all the available SNPs (blue) and only transversions (red). A) Peru_Cuncaicha_9000BP, B)Peru_Lauricocha_8600BP, C)Peru_Cuncaicha_4200BP, D)Peru_LaGalgada_4100BP, and E)Peru_Lauricocha_3500BP. On the X axes, we observe the Zscore and the vertical lines represent |Z|= 3.3 and 3, and on the Y axes, samples are ordered based on a decreasing Zscore. Only statistics with more than 30,000 SNPs are represented.
 
 ***References***
 1. Patterson, N., Moorjani, P., Luo, Y., Mallick, S., Rohland, N., Zhan, Y., Genschoreck, T., Webster, T., and Reich, D. (2012). Ancient Admixture in Human History. Genetics 192, 1065–1093. 10.1534/genetics.112.145037.

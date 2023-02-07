@@ -148,6 +148,10 @@ mkdir splitted_plink
 
 for chr in {1..22}; do vcftools --vcf  /phased_chr/chrom${chr}_phased_order.vcf --plink --out splitted_plink/splitted_${chr}; done
 ```
+#### 2.2.2 Output comparison with admixture
+![comparison](https://user-images.githubusercontent.com/60963543/217291760-c53d0c2e-6f5b-4787-b755-578790fcda4c.jpeg)
+
+
 
 ### 2.3 Processing the output. MASKING
 

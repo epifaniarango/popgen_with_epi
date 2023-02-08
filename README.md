@@ -148,18 +148,20 @@ mkdir splitted_plink
 
 for chr in {1..22}; do vcftools --vcf  /phased_chr/chrom${chr}_phased_order.vcf --plink --out splitted_plink/splitted_${chr}; done
 ```
-#### 2.2.2 Output comparison with admixture
-![comparison](https://user-images.githubusercontent.com/60963543/217291760-c53d0c2e-6f5b-4787-b755-578790fcda4c.jpeg)
+#### 2.2.2 Output comparison with ADMIXTURE
+The performance of RFMIX in assigning the Native American component is comparable to that of ADMIXTURE (Fig. 3). Despite this, RFMIX tends to underrepresent the Native American component in North American populations, as demonstrated in Fig. 3. This occurs due to the closer genetic relationship between North American populations and European populations, compared to South American ones.
 
+![comparison](https://user-images.githubusercontent.com/60963543/217291760-c53d0c2e-6f5b-4787-b755-578790fcda4c.jpeg)
+***Figure 3:*** Comparison of American ancestry asignation by ADMIXTURE and RFMIX
 
 
 ### 2.3 Processing the output. MASKING
 
-RFMIX creates several output files; one of them contains information on the posterior probability of the ancestry assignation for each SNP. The following script selects calls with higher confidence than 0.9. In the literature, I observed two masking methods, so I decided to evaluate which protocol was better (pseudo(8,9) or diploid masking(10)). In the diploid masking, for a SNP call to be kept, both sides of the chromosome should have been assigned with the same ancestry (in our case, Native American ancestry) (Fig. 3.A). While in the pseudo haploid methods, all calls assigned to the ancestry of interest are kept, as many software do not allow half-calls (a call on one chromosome and a missing call on the second one), the individuals will be pseudohaploidized (Fig. 3.B).
+RFMIX creates several output files; one of them contains information on the posterior probability of the ancestry assignation for each SNP. The following script selects calls with higher confidence than 0.9. In the literature, I observed two masking methods, so I decided to evaluate which protocol was better (pseudo(8,9) or diploid masking(10)). In the diploid masking, for a SNP call to be kept, both sides of the chromosome should have been assigned with the same ancestry (in our case, Native American ancestry) (Fig. 4.A). While in the pseudo haploid methods, all calls assigned to the ancestry of interest are kept, as many software do not allow half-calls (a call on one chromosome and a missing call on the second one), the individuals will be pseudohaploidized (Fig. 4.B).
 
 
 ![panel5 (dragged)](https://user-images.githubusercontent.com/60963543/189116108-c383b15e-19c4-4eba-8113-7a3a7d7c4eda.png)
-***Figure 3:*** Visual representation of masking methods. A) diploid and B) pseudohaploid masking of one individual.
+***Figure 4:*** Visual representation of masking methods. A) diploid and B) pseudohaploid masking of one individual.
 
 The code will not work if the names of the files are different. I created the script under R v4.0.3, be aware that things might not work with other versions. You can use a conda environment to select the desired version. The script is above. I create here 2 types of masking: diploid and pseudohaploid.
 
@@ -182,17 +184,17 @@ The plink file pseudo_haploid contains both the masked individuals and the indiv
 Thank you Jonas, for your help with this script =)
 
 ## 3. Comparing performance of both methods
-After following both masking protocols, we compared the performance by calculating the percentage of missing data per individual (Fig. 4) and the same f4-statistics mentioned above to compare the performance of the masking (Fig. 5).
+After following both masking protocols, we compared the performance by calculating the percentage of missing data per individual (Fig.5) and the same f4-statistics mentioned above to compare the performance of the masking (Fig. 6).
 ![Rplot09](https://user-images.githubusercontent.com/60963543/189121417-7c79fd67-3b62-49d6-ac6e-2b213447621a.png)
-***Figure 4:*** Percentage of missing data per individual after applying A) diploid and B) pseudohaploid masking.
+***Figure 5:*** Percentage of missing data per individual after applying A) diploid and B) pseudohaploid masking.
 
 ![f4_comparison](https://user-images.githubusercontent.com/60963543/189122958-8a3df657-c833-498a-8c74-9af7414364f0.png)
-***Figure 5:*** Performance of masking methods A) diploid and B) pseudohaploid masking, measured through the statistic f4(Unadmixed American Population, Target Individual, Han, San) being Unadmixed American Populations being Karitiana, Mixe, and Xavante. 
+***Figure 6:*** Performance of masking methods A) diploid and B) pseudohaploid masking, measured through the statistic f4(Unadmixed American Population, Target Individual, Han, San) being Unadmixed American Populations being Karitiana, Mixe, and Xavante. 
 
-The performance of both methods is the same as both are based on the same local ancestry run (Fig. 5), but pseudo haploid masking keeps a higher number of SNPs (Fig. 4). We decided to only used the pseudohaploid masking for all the downstream analysis. We also confirmed the performance wih different PCA visualizations (Fig. 6).
+The performance of both methods is the same as both are based on the same local ancestry run (Fig. 6), but pseudo haploid masking keeps a higher number of SNPs (Fig. 5). We decided to only used the pseudohaploid masking for all the downstream analysis. We also confirmed the performance wih different PCA visualizations (Fig. 7).
 
 ![pca_plots](https://user-images.githubusercontent.com/60963543/189308775-164c7121-e466-4cd6-9ccc-6bc3f341c6e9.png)
-***Figure 6:*** PCA with masked individuals with “only” Native American ancestry. A) masked American Samples with African and European references. B) masked American samples with European references. C) masked American Samples (Dataset 3.2).
+***Figure 7:*** PCA with masked individuals with “only” Native American ancestry. A) masked American Samples with African and European references. B) masked American samples with European references. C) masked American Samples (Dataset 3.2).
 
 The masking performs well, and we could use the masked samples for several downstream analyses as sensible as D-statistics. I hope it was helpful; email me if you need some help (epifaniarango@gmail.com).
 

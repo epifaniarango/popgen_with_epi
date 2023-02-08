@@ -151,7 +151,7 @@ for chr in {1..22}; do vcftools --vcf  /phased_chr/chrom${chr}_phased_order.vcf 
 #### 2.2.2 Output comparison with ADMIXTURE
 The performance of RFMIX in assigning the Native American component is comparable to that of ADMIXTURE (Fig. 3). Despite this, RFMIX tends to underrepresent the Native American component in North American populations, as demonstrated in Fig. 3. This occurs due to the closer genetic relationship between North American populations and European populations, compared to South American ones.
 
-![comparison](https://user-images.githubusercontent.com/60963543/217291760-c53d0c2e-6f5b-4787-b755-578790fcda4c.jpeg)
+![comparison](https://user-images.githubusercontent.com/60963543/217549786-5eea35d1-0be2-4de6-9843-71845924874e.jpeg)
 ***Figure 3:*** Comparison of American ancestry asignation by ADMIXTURE and RFMIX
 
 

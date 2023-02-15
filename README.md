@@ -55,6 +55,7 @@ To asses the relationship of the Southern Cone with external populations, we use
 The best fitting qpGraph topolgy that includes contemporary Mapuche populations (Fig. 6C, main text) requires two admxiture edges from a branch related to LapaDoSanto into Conchalí and LosRieles5100BP. By removing this admixture edge, the tree topolgy is not supported(Fig.S7, Supplementary Material). However, we found no consistent significant results with the f4 configuration f4(Mbuti, LapaDoSanto: Conchalí/LosRieles5100BP, Southern Cone), just a tendency which raises uncertainties about this additional 'ancient substrate' connection (Fig. 8).
 
 ![figure8](https://user-images.githubusercontent.com/60963543/219059601-9b90fa93-90db-4e4b-9684-bdd1e6677bec.jpeg)
+
 ***Figure 8:*** f4(Mbuti, LapaDoSanto; Conchalí/LosRieles5100, Southern Cone)  The statistics were calculated using all the available SNPs (blue) and only transversions (red). On the X axes, we observe the Zscore and the vertical lines represent |Z|= 3.3 and 3, and on the Y axes, samples are ordered based on a decreasing Zscore. Only statistics with more than 30,000 SNPs are represented.
 
 ***References***

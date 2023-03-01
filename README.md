@@ -7,7 +7,7 @@ We have included the most relevant plots to clarify our D-statistic analysis, co
 To quantify the genetic affinity in terms of shared genetic drift, we used the outgroup f3-statistic, with the Mbuti as the outgroup, i.e. f3(Mbuti; Pop1, Pop2), using qp3Pop (1). The supplementary table (f3 tab) contains all possible combinations of this statistics with Dataset 3.3. Here, we preent 
 the combinations that include one of our newly sequenced Southern Chile populations (Figure 1).
 
-![Rplot13](https://user-images.githubusercontent.com/60963543/209326981-e80e9967-87a8-49c5-be95-18057005d112.png)
+![Figure1](https://user-images.githubusercontent.com/60963543/222106380-28d75e47-27a7-45fe-9991-08095c3e1ea6.jpeg)
 ***Figure 1:*** Outgroup f3-statistics of the form f3(Mbuti, X, Y) being X: A) Lafkenche B) Pehuenche C) Huilliche-Chiloe and Y all the available populations or ancient samples from Dataset 3.3. Populations on the Y axes are ordered based on an decreasing value of the f3 results. 
 
 ## F4-statistics

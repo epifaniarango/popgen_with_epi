@@ -25,10 +25,10 @@ This repository hosts the scripts used for data analysis and visualization prese
 
 You can navigate different content by switching branches. Each branch may represent a different aspect of the analysis or provide access to various versions of the scripts used in the study.
 
-- IBD (identity by descent)analysis
-- ALDER for dating admixture times
-- Masking ancestries in admixed populations
-- Dstats plots
+- IBD (identity by descent)analysis (https://github.com/epifaniarango/popgen_with_epi/tree/IBD)
+- ALDER for dating admixture times (https://github.com/epifaniarango/popgen_with_epi/tree/ALDER)
+- Masking ancestries in admixed populations (https://github.com/epifaniarango/popgen_with_epi/tree/Local-ancestry-and-masking)
+- Dstats plots (https://github.com/epifaniarango/popgen_with_epi/tree/Dstats-plots)
 
 ## Contributions
 

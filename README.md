@@ -1,6 +1,6 @@
 # Scripts for the Publication "The Genetic History of the Southern Andes from Present-Day Mapuche Ancestry"
 
-This repository contains scripts related to the analysis conducted for the publication "The Genetic History of the Southern Andes from Present-Day Mapuche Ancestry" in Current Biology (2023). The publication can be accessed [here](https://doi.org/10.1016/j.cub.2023.05.013).
+This repository contains scripts related to the analysis conducted for the publication "The Genetic History of the Southern Andes from Present-Day Mapuche Ancestry" in Current Biology (2023). The publication can be accessed [here](https://doi.org/10.1016/j.cub.2023.05.013). Also in Zenodo: [![DOI](https://zenodo.org/badge/239972640.svg)](https://zenodo.org/doi/10.5281/zenodo.10024569)
 
 ## Introduction
 
